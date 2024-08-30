@@ -8,9 +8,9 @@ resolution-markers = [
 
 [manifest]
 members = [
-    "aviary",
     "aviary-gsm8k",
     "aviary-hotpotqa",
+    "fhaviary",
 ]
 
 [[package]]
@@ -160,98 +160,12 @@ wheels = [
 ]
 
 [[package]]
-name = "aviary"
-version = "0.1.dev9+g4ddab6f.d20240829"
-source = { editable = "." }
-dependencies = [
-    { name = "docstring-parser" },
-    { name = "httpx" },
-    { name = "pydantic" },
-    { name = "sqlalchemy" },
-]
-
-[package.optional-dependencies]
-cloud = [
-    { name = "boto3" },
-]
-image = [
-    { name = "pillow" },
-]
-server = [
-    { name = "fastapi" },
-]
-typing = [
-    { name = "boto3-stubs", extra = ["s3"] },
-    { name = "numpy" },
-    { name = "types-pillow" },
-]
-xml = [
-    { name = "dicttoxml" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "boto3-stubs", extra = ["s3"] },
-    { name = "dicttoxml" },
-    { name = "fastapi" },
-    { name = "ipython" },
-    { name = "mypy" },
-    { name = "numpy" },
-    { name = "pillow" },
-    { name = "pre-commit" },
-    { name = "pylint" },
-    { name = "pylint-pydantic" },
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
-    { name = "pytest-subtests" },
-    { name = "pytest-sugar" },
-    { name = "pytest-timer", extra = ["colorama"] },
-    { name = "pytest-xdist" },
-    { name = "refurb" },
-    { name = "sqlalchemy", extra = ["aiosqlite"] },
-    { name = "types-pillow" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "boto3", marker = "extra == 'cloud'" },
-    { name = "boto3-stubs", extras = ["s3"], marker = "extra == 'typing'" },
-    { name = "dicttoxml", marker = "extra == 'xml'" },
-    { name = "docstring-parser" },
-    { name = "fastapi", marker = "extra == 'server'", specifier = ">=0.109" },
-    { name = "httpx" },
-    { name = "numpy", marker = "extra == 'typing'" },
-    { name = "pillow", marker = "extra == 'image'" },
-    { name = "pydantic", specifier = "~=2.0" },
-    { name = "sqlalchemy", specifier = "~=2.0" },
-    { name = "types-pillow", marker = "extra == 'typing'" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "aviary", extras = ["image", "server", "typing", "xml"], editable = "." },
-    { name = "ipython", specifier = ">=8" },
-    { name = "mypy", specifier = ">=1.8" },
-    { name = "pre-commit", specifier = "~=3.4" },
-    { name = "pylint", specifier = ">=3.2" },
-    { name = "pylint-pydantic" },
-    { name = "pytest", specifier = ">=8" },
-    { name = "pytest-asyncio" },
-    { name = "pytest-subtests" },
-    { name = "pytest-sugar" },
-    { name = "pytest-timer", extras = ["colorama"] },
-    { name = "pytest-xdist" },
-    { name = "refurb", specifier = ">=2" },
-    { name = "sqlalchemy", extras = ["aiosqlite"], specifier = "~=2.0" },
-]
-
-[[package]]
 name = "aviary-gsm8k"
-version = "0.1.dev9+g4ddab6f.d20240829"
+version = "0.1.dev4+gfd5242a"
 source = { editable = "packages/gsm8k" }
 dependencies = [
-    { name = "aviary" },
     { name = "datasets" },
+    { name = "fhaviary" },
     { name = "pydantic" },
 ]
 
@@ -262,20 +176,20 @@ typing = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aviary", editable = "." },
     { name = "datasets" },
+    { name = "fhaviary", editable = "." },
     { name = "pandas-stubs", marker = "extra == 'typing'" },
     { name = "pydantic", specifier = "~=2.0" },
 ]
 
 [[package]]
 name = "aviary-hotpotqa"
-version = "0.1.dev9+g4ddab6f.d20240829"
+version = "0.1.dev4+gfd5242a"
 source = { editable = "packages/hotpotqa" }
 dependencies = [
-    { name = "aviary" },
     { name = "beautifulsoup4" },
     { name = "datasets" },
+    { name = "fhaviary" },
     { name = "httpx" },
     { name = "pydantic" },
     { name = "tenacity" },
@@ -283,9 +197,9 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aviary", editable = "." },
     { name = "beautifulsoup4" },
     { name = "datasets" },
+    { name = "fhaviary", editable = "." },
     { name = "httpx" },
     { name = "pydantic", specifier = "~=2.0" },
     { name = "tenacity" },
@@ -360,6 +274,20 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/f4/e5/316885d0713380536c77bf51070dd0398e7e7a6d6c475c78dd7a23764ed6/botocore_stubs-1.35.9.tar.gz", hash = "sha256:59ffbfcac1833990e6c586bff4fcf481ef01b4b88e6d65073d842f6aff84b92e", size = 40581 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b0/ca/067e506e7a33287703cc5a0b2acc201bd87bfa22a30cc8c8662859beaee5/botocore_stubs-1.35.9-py3-none-any.whl", hash = "sha256:98c1d7ca0147cd88cc09f08425a2d58bd004232d211c4a4ca9febda6f3b20a85", size = 60120 },
+]
+
+[[package]]
+name = "build"
+version = "1.2.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "colorama", marker = "os_name == 'nt'" },
+    { name = "packaging" },
+    { name = "pyproject-hooks" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ce/9e/2d725d2f7729c6e79ca62aeb926492abbc06e25910dd30139d60a68bcb19/build-1.2.1.tar.gz", hash = "sha256:526263f4870c26f26c433545579475377b2b7588b6f1eac76a001e873ae3e19d", size = 44781 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e2/03/f3c8ba0a6b6e30d7d18c40faab90807c9bb5e9a1e3b2fe2008af624a9c97/build-1.2.1-py3-none-any.whl", hash = "sha256:75e10f767a433d9a86e50d83f418e83efc18ede923ee5ff7df93b6cb0306c5d4", size = 21911 },
 ]
 
 [[package]]
@@ -528,6 +456,96 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/9c/11/4874d165e7ef97aa803a567a4be8f9c8b0bd7cced6d536d44033ef7d4bfa/fastapi-0.112.2.tar.gz", hash = "sha256:3d4729c038414d5193840706907a41839d839523da6ed0c2811f1168cac1798c", size = 291967 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/5c/ae/6570ae1b67007735229f10f2e1174d6e33c056ee9c0c1754d432acbede94/fastapi-0.112.2-py3-none-any.whl", hash = "sha256:db84b470bd0e2b1075942231e90e3577e12a903c4dc8696f0d206a7904a7af1c", size = 93471 },
+]
+
+[[package]]
+name = "fhaviary"
+version = "0.1.dev6+gf243ec2.d20240829"
+source = { editable = "." }
+dependencies = [
+    { name = "docstring-parser" },
+    { name = "httpx" },
+    { name = "pydantic" },
+    { name = "sqlalchemy" },
+]
+
+[package.optional-dependencies]
+cloud = [
+    { name = "boto3" },
+]
+image = [
+    { name = "pillow" },
+]
+server = [
+    { name = "fastapi" },
+]
+typing = [
+    { name = "boto3-stubs", extra = ["s3"] },
+    { name = "numpy" },
+    { name = "types-pillow" },
+]
+xml = [
+    { name = "dicttoxml" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "aviary-gsm8k", extra = ["typing"] },
+    { name = "boto3-stubs", extra = ["s3"] },
+    { name = "build" },
+    { name = "dicttoxml" },
+    { name = "fastapi" },
+    { name = "ipython" },
+    { name = "mypy" },
+    { name = "numpy" },
+    { name = "pillow" },
+    { name = "pre-commit" },
+    { name = "pylint" },
+    { name = "pylint-pydantic" },
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+    { name = "pytest-subtests" },
+    { name = "pytest-sugar" },
+    { name = "pytest-timer", extra = ["colorama"] },
+    { name = "pytest-xdist" },
+    { name = "refurb" },
+    { name = "sqlalchemy", extra = ["aiosqlite"] },
+    { name = "types-pillow" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "boto3", marker = "extra == 'cloud'" },
+    { name = "boto3-stubs", extras = ["s3"], marker = "extra == 'typing'" },
+    { name = "dicttoxml", marker = "extra == 'xml'" },
+    { name = "docstring-parser" },
+    { name = "fastapi", marker = "extra == 'server'", specifier = ">=0.109" },
+    { name = "httpx" },
+    { name = "numpy", marker = "extra == 'typing'" },
+    { name = "pillow", marker = "extra == 'image'" },
+    { name = "pydantic", specifier = "~=2.0" },
+    { name = "sqlalchemy", specifier = "~=2.0" },
+    { name = "types-pillow", marker = "extra == 'typing'" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "aviary-gsm8k", extras = ["typing"], editable = "packages/gsm8k" },
+    { name = "build" },
+    { name = "fhaviary", extras = ["image", "server", "typing", "xml"], editable = "." },
+    { name = "ipython", specifier = ">=8" },
+    { name = "mypy", specifier = ">=1.8" },
+    { name = "pre-commit", specifier = "~=3.4" },
+    { name = "pylint", specifier = ">=3.2" },
+    { name = "pylint-pydantic" },
+    { name = "pytest", specifier = ">=8" },
+    { name = "pytest-asyncio" },
+    { name = "pytest-subtests" },
+    { name = "pytest-sugar" },
+    { name = "pytest-timer", extras = ["colorama"] },
+    { name = "pytest-xdist" },
+    { name = "refurb", specifier = ">=2" },
+    { name = "sqlalchemy", extras = ["aiosqlite"], specifier = "~=2.0" },
 ]
 
 [[package]]
@@ -1235,6 +1253,15 @@ dependencies = [
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/11/80/34b429c6534be99ef3d6d20bd794b26fda0682d38e2d57f85df258beaac2/pylint_pydantic-0.3.2-py3-none-any.whl", hash = "sha256:e5cec02370aa68ac8eff138e5d573b0ac049bab864e9a6c3a9057cf043440aa1", size = 15951 },
+]
+
+[[package]]
+name = "pyproject-hooks"
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/c7/07/6f63dda440d4abb191b91dc383b472dae3dd9f37e4c1e4a5c3db150531c6/pyproject_hooks-1.1.0.tar.gz", hash = "sha256:4b37730834edbd6bd37f26ece6b44802fb1c1ee2ece0e54ddff8bfc06db86965", size = 7838 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ae/f3/431b9d5fe7d14af7a32340792ef43b8a714e7726f1d7b69cc4e8e7a3f1d7/pyproject_hooks-1.1.0-py3-none-any.whl", hash = "sha256:7ceeefe9aec63a1064c18d939bdc3adf2d8aa1988a510afec15151578b232aa2", size = 9184 },
 ]
 
 [[package]]
