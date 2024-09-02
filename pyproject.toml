@@ -161,6 +161,7 @@ disable = [
     "logging-fstring-interpolation",  # f-strings are convenient
     "logging-too-many-args",  # Rely on ruff PLE1205 for this
     "missing-docstring",  # Let docformatter and ruff take care of docstrings
+    "missing-final-newline",  # Rely on ruff W292 for this
     "no-else-return",  # Rely on ruff RET506 for this
     "no-member",  # Buggy, SEE: https://github.com/pylint-dev/pylint/issues/8138
     "not-callable",  # Don't care to enforce this
@@ -202,7 +203,7 @@ min-similarity-lines = 12
 [tool.pytest.ini_options]
 # Add the specified OPTS to the set of command line arguments as if they had been
 # specified by the user.
-addopts = "--doctest-modules"
+addopts = "--typeguard-packages=aviary --doctest-modules"
 # List of directories that should be searched for tests when no specific directories,
 # files or test ids are given in the command line when executing pytest from the rootdir
 # directory. File system paths may use shell-style wildcards, including the recursive **
@@ -392,6 +393,7 @@ dev-dependencies = [
     "pytest-xdist",
     "pytest>=8",  # Pin to keep recent
     "refurb>=2",  # Pin to keep recent
+    "typeguard",
 ]
 
 [tool.uv.sources]
