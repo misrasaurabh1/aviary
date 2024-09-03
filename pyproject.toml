@@ -52,6 +52,14 @@ repository = "https://github.com/Future-House/aviary"
 [tool.black]
 preview = true
 
+[tool.codeflash]
+disable-imports-sorting = true
+disable-telemetry = true
+formatter-cmds = ["ruff check --exit-zero --fix $file", "ruff format $file"]
+module-root = "src/aviary"
+test-framework = "pytest"
+tests-root = "tests"
+
 [tool.codespell]
 check-filenames = true
 check-hidden = true
@@ -215,7 +223,6 @@ enable_all = true
 ignore = [
     "FURB101",  # FURB101, FURB103, FURB141, FURB144, FURB146, FURB147, FURB150, FURB155: no need for pathlib
     "FURB103",
-    "FURB118",  # We often use inspect.signature in FxnOp. In 3.11, this doesn't work on operator.itemgetter.
     "FURB141",
     "FURB144",
     "FURB146",
@@ -279,7 +286,6 @@ ignore = [
     "ARG002",  # Thrown all the time when we are subclassing
     "ARG003",  # Thrown all the time when we are subclassing
     "ASYNC109",  # Buggy, SEE: https://github.com/astral-sh/ruff/issues/12353
-    "ASYNC2",  # It's ok to mix async and sync ops (like opening a file)
     "BLE001",  # Don't care to enforce blind exception catching
     "COM812",  # Trailing comma with black leads to wasting lines
     "D100",  # D100, D101, D102, D103, D104, D105, D106, D107: don't always need docstrings
@@ -307,8 +313,8 @@ ignore = [
     "G004",  # f-strings are convenient
     "INP001",  # Can use namespace packages
     "ISC001",  # For ruff format compatibility
-    "N803",  # Allow matching math formula names
-    "N806",  # Allow matching math formula names or conventions (e.g. G for graph)
+    "N803",  # Allow matching math formula names/conventions
+    "N806",  # Allow matching math formula names/conventions
     "PLC0415",  # Don't care to prevent imports outside of top-level
     "PLR0912",  # Allow us to have lots of branches
     "PLR0913",
@@ -380,6 +386,7 @@ dev-dependencies = [
     "aviary.gsm8k[typing]",  # So `uv sync` pulls this in, and for type stubs
     "aviary.hotpotqa",  # So `uv sync` pulls this in
     "build",  # TODO: remove after https://github.com/astral-sh/uv/issues/6278
+    "codeflash",
     "fhaviary[image,server,typing,xml]",
     "ipython>=8",  # Pin to keep recent
     "mypy>=1.8",  # Pin for mutable-override
