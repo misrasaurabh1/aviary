@@ -119,18 +119,34 @@ class TestMessage:
         assert "image_url" in specialized_content[image_idx]
 
 
-def test_from_request() -> None:
-    trm = ToolRequestMessage(
-        content="stub",
-        tool_calls=[
-            ToolCall(
-                id="1",
-                function=ToolCallFunction(name="name1", arguments={"hi": 5}),
-            ),
-            ToolCall(id="2", function=ToolCallFunction(name="name2", arguments={})),
-        ],
-    )
-    assert ToolResponseMessage.from_request(trm, ("stub1", "stub2")) == [
-        ToolResponseMessage(content="stub1", name="name1", tool_call_id="1"),
-        ToolResponseMessage(content="stub2", name="name2", tool_call_id="2"),
-    ]
+class TestToolRequestMessage:
+    def test_from_request(self) -> None:
+        trm = ToolRequestMessage(
+            content="stub",
+            tool_calls=[
+                ToolCall(
+                    id="1",
+                    function=ToolCallFunction(name="name1", arguments={"hi": 5}),
+                ),
+                ToolCall(id="2", function=ToolCallFunction(name="name2", arguments={})),
+            ],
+        )
+        assert ToolResponseMessage.from_request(trm, ("stub1", "stub2")) == [
+            ToolResponseMessage(content="stub1", name="name1", tool_call_id="1"),
+            ToolResponseMessage(content="stub2", name="name2", tool_call_id="2"),
+        ]
+
+    def test_append_text(self) -> None:
+        trm = ToolRequestMessage(
+            content="stub", tool_calls=[ToolCall.from_name("stub_name")]
+        )
+        trm_inplace = trm.append_text("text")
+        assert trm.content == trm_inplace.content == "stub\ntext"
+        # Check append performs an in-place change by default
+        assert trm.tool_calls[0] is trm_inplace.tool_calls[0]
+
+        trm_copy = trm.append_text("text", inplace=False)
+        assert trm_copy.content == "stub\ntext\ntext"
+        # Check append performs a deep copy when not inplace
+        assert trm.content == "stub\ntext"
+        assert trm.tool_calls[0] is not trm_copy.tool_calls[0]

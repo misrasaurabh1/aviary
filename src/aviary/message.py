@@ -73,7 +73,9 @@ class Message(BaseModel):
             dump["content"] = json.loads(dump["content"])
         return dump
 
-    def append_text(self, text: str, delim="\n", inplace=True) -> Message:
+    def append_text(
+        self, text: str, delim: str = "\n", inplace: bool = True
+    ) -> Message:
         """Append text to the content.
 
         Args:
@@ -97,7 +99,7 @@ class Message(BaseModel):
             except json.JSONDecodeError as e:
                 raise ValueError("Content is not valid JSON.") from e
         else:
-            new_content = self.content + delim + text
+            new_content = f"{self.content}{delim}{text}"
         if inplace:
             self.content = new_content
             return self
