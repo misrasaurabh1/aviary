@@ -4,6 +4,7 @@ import pathlib
 import tempfile
 from typing import ClassVar
 
+import litellm
 import pytest
 from pydantic import BaseModel
 
@@ -328,7 +329,7 @@ class TestParallelism:
 
     @pytest.mark.parametrize("model_name", [CILLMModelNames.OPENAI.value])
     @pytest.mark.asyncio
-    async def test_with_tool_selector(self, model_name: str) -> None:
+    async def test_tool_selector_from_model_name(self, model_name: str) -> None:
         env = ParallelizedDummyEnv()
         obs, tools = await env.reset()
         ledger = ToolSelectorLedger(tools=tools)
@@ -337,5 +338,25 @@ class TestParallelism:
         tool_request_message = await selector(obs, tools)
         ledger.messages.append(tool_request_message)
         ledger.model_dump()  # Proving we can serialize the ledger
+        assert isinstance(tool_request_message, ToolRequestMessage)
+        assert tool_request_message.tool_calls, "Expected at least one tool call"
+
+    @pytest.mark.parametrize("model_name", [CILLMModelNames.OPENAI.value])
+    @pytest.mark.asyncio
+    async def test_tool_selector_with_external_acompletion(
+        self, model_name: str
+    ) -> None:
+        env = ParallelizedDummyEnv()
+        obs_tools = await env.reset()
+
+        router = litellm.Router(
+            model_list=[
+                litellm.DeploymentTypedDict(
+                    model_name="openai", litellm_params={"model": model_name}
+                )
+            ]
+        )
+        selector = ToolSelector("openai", router.acompletion)
+        tool_request_message = await selector(*obs_tools)
         assert isinstance(tool_request_message, ToolRequestMessage)
         assert tool_request_message.tool_calls, "Expected at least one tool call"
