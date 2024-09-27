@@ -47,13 +47,17 @@ def argref_wraps(wrapped):
     return partial(argref_wrapper, wrapped=wrapped)
 
 
-def argref_by_name(  # noqa: C901
-    fxn_requires_state: bool = False, prefix: str = "", return_direct: bool = False
+def argref_by_name(  # noqa: C901,PLR0915
+    fxn_requires_state: bool = False,
+    prefix: str = "",
+    return_direct: bool = False,
 ):
     """Decorator to allow args to be a string key into a refs dict instead of the full object.
 
     This can prevent LLM-powered tool selections from getting confused by full objects,
-    instead it enables them to work using named references.
+    instead it enables them to work using named references. If a reference is not found, it
+    will fallback on passing the original argument unless it is the first argument. If the
+    first argument str is not found in the state object, it will raise an error.
 
     Args:
         fxn_requires_state: Whether to pass the state object to the decorated function.
@@ -91,7 +95,7 @@ def argref_by_name(  # noqa: C901
     """
 
     def decorator(func):  # noqa: C901
-        def get_call_args(*args, **kwargs):
+        def get_call_args(*args, **kwargs):  # noqa: C901
             if "state" not in kwargs:
                 raise ValueError(
                     "argref_by_name decorated function must have a 'state' argument. "
@@ -101,39 +105,54 @@ def argref_by_name(  # noqa: C901
             # pop the state argument
             state = kwargs["state"] if fxn_requires_state else kwargs.pop("state")
 
-            # pop all string arguments
-            other_args = []
-            keyname_args = []
-            deref_args = []
-            largs = list(args)
-            while largs and isinstance(largs[0], str):
-                keyname_args.append(largs.pop(0))
-            if largs:
-                other_args.extend(largs)
-            if not keyname_args and kwargs:
-                name = next(iter(kwargs))
-                keyname_args = [kwargs.pop(name)]
+            # now convert the keynames to actual references (if they are a string)
+            # tuple is (arg, if was dereferenced)
+            def maybe_deref_arg(arg):
+                if isinstance(arg, str):
+                    try:
+                        if arg in state.refs:
+                            return [state.refs[arg]], True
+                        # sometimes it is not correctly converted to a tuple
+                        # so as an attempt to be helpful...
+                        if all(a.strip() in state.refs for a in arg.split(",")):
+                            return [state.refs[a.strip()] for a in arg.split(",")], True
+                        # fall through
+                    except AttributeError as e:
+                        raise AttributeError(
+                            "The state object must have a 'refs' attribute to use argref_by_name decorator."
+                        ) from e
+                return arg, False
 
-            # now convert the keynames to actual references
-            for arg in keyname_args:
-                try:
-                    if arg in state.refs:
-                        deref_args.append(state.refs[arg])
-                    # sometimes it is not correctly converted to a tuple
-                    # so as an attempt to be helpful...
-                    elif all(a.strip() in state.refs for a in arg.split(",")):
-                        deref_args.extend([
-                            state.refs[a.strip()] for a in arg.split(",")
-                        ])
-                    else:
-                        raise KeyError(
-                            f"Key '{arg}' not found in state. Available keys: {list(state.refs.keys())}"
+            # the split thing makes it complicated and we cannot use comprehension
+            deref_args = []
+            atleast_one_deref = False
+            for i, arg in enumerate(args):
+                a, dr = maybe_deref_arg(arg)
+                if dr:
+                    deref_args.extend(a)
+                    atleast_one_deref = True
+                else:
+                    if i == 0 and isinstance(arg, str):
+                        # This is a bit of a heuristic, but if the first arg is a string and not found
+                        # likely the user intended to use a reference
+                        raise KeyError(f"The key {arg} is not found in state.")
+                    deref_args.append(a)
+            deref_kwargs = {}
+            for i, (k, v) in enumerate(kwargs.items()):
+                a, dr = maybe_deref_arg(v)
+                if dr:
+                    if len(a) > 1:
+                        raise ValueError(
+                            f"Multiple values for argument '{k}' found in state. "
+                            " cannot use split notation for kwargs."
                         )
-                except AttributeError as e:
-                    raise AttributeError(
-                        "The state object must have a 'refs' attribute to use argref_by_name decorator."
-                    ) from e
-            return deref_args, other_args, kwargs, state
+                    deref_kwargs[k] = a[0]
+                else:
+                    if i == 0 and isinstance(a, str) and not atleast_one_deref:
+                        raise KeyError(f"The key {a} is not found in state.")
+                    deref_kwargs[k] = a
+
+            return deref_args, deref_kwargs, state
 
         def update_state(state, result):
             if return_direct:
@@ -153,14 +172,14 @@ def argref_by_name(  # noqa: C901
 
         @argref_wraps(func)
         def wrapper(*args, **kwargs):
-            args, other_args, kwargs, state = get_call_args(*args, **kwargs)
-            result = func(*args, *other_args, **kwargs)
+            args, kwargs, state = get_call_args(*args, **kwargs)
+            result = func(*args, **kwargs)
             return update_state(state, result)
 
         @argref_wraps(func)
         async def awrapper(*args, **kwargs):
-            args, other_args, kwargs, state = get_call_args(*args, **kwargs)
-            result = await func(*args, *other_args, **kwargs)
+            args, kwargs, state = get_call_args(*args, **kwargs)
+            result = await func(*args, **kwargs)
             return update_state(state, result)
 
         wrapper.requires_state = True
