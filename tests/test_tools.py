@@ -1,6 +1,6 @@
 import json
 import pickle
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from enum import IntEnum, auto
 from typing import Any
 
@@ -668,9 +668,7 @@ async def test_argref_by_name_advanced_features() -> None:
 
     # Assert that we can describe the tool
     assert tool.info.describe_str()
-    assert (
-        "(set via a string key instead of the full object)" in tool.info.describe_str()
-    )
+    assert "(Pass a string key instead of the full object)" in tool.info.describe_str()
 
     # Test state passing with fxn_requires_state
     @argref_by_name(fxn_requires_state=True)
@@ -688,3 +686,53 @@ async def test_argref_by_name_advanced_features() -> None:
     my_env = DummyEnv()
     my_env.tools = [tool]
     await my_env.exec_tool_calls(action, state=MyState())
+
+
+@pytest.mark.asyncio
+async def test_argref_by_name_type_checking() -> None:
+    class MyInt(int):
+        pass
+
+    class MyState:
+        def __init__(self):
+            self.refs = {
+                "int_arg": 1,
+                "str_arg": "abc",
+                "int_list_arg": [1],
+                "str_list_arg": ["abc"],
+                "my_int_list_arg": [MyInt()],
+            }
+
+    s = MyState()
+
+    def typed_fn(a: int, b) -> int:  # noqa: ARG001
+        """Some docstring."""
+        return a
+
+    # Make sure we can decorate the function twice. Decoration should not
+    # modify the underlying function or its annotations.
+    for _ in range(2):
+        type_checked_fn = argref_by_name(type_check=True)(typed_fn)
+
+        type_checked_fn(a="int_arg", b="str_arg", state=s)  # correctly-typed
+        with pytest.raises(TypeError):
+            # A non-int value is passed to a by name
+            type_checked_fn(a="str_arg", b="bar", state=s)
+
+    def complex_typed_fn(c: Sequence[int], d: int | str) -> None:
+        """Some docstring."""
+
+    for _ in range(2):
+        type_checked_fn = argref_by_name(type_check=True)(complex_typed_fn)
+
+        type_checked_fn(c="int_list_arg", d="str_arg", state=s)  # correctly-typed
+        # list[MyInt] should match Sequence[int]
+        type_checked_fn(c="my_int_list_arg", d="str_arg", state=s)
+
+        with pytest.raises(TypeError):
+            # passing int, not list[int]
+            type_checked_fn(c="int_arg", d="str_arg", state=s)
+
+        with pytest.raises(TypeError):
+            # passing list[str], not list[int]
+            type_checked_fn(c="str_list_arg", d="int_arg", state=s)
