@@ -25,13 +25,12 @@ def make_pretty_id(prefix: str = "") -> str:
     return prefix + "-" + uuid_frags[0]
 
 
-ARGREF_NOTE = "(Pass a string key instead of the full object)"
+DEFAULT_ARGREF_NOTE = "(Pass a string key instead of the full object)"
+LIST_ARGREF_NOTE = "(Pass comma-separated string keys instead of the full object)"
 
 
-def argref_wrapper(wrapper, wrapped, args_to_skip: set[str] | None):
+def argref_wrapper(wrapper, wrapped, args_to_skip: set[str]):
     """Inject the ARGREF_NOTE into the Args."""
-    args_to_skip = (args_to_skip or set()) | {"state", "return"}
-
     # normal wraps
     wrapped_func = update_wrapper(wrapper, wrapped)
     # when we modify wrapped_func's annotations, we don't want to mutate wrapped
@@ -51,13 +50,17 @@ def argref_wrapper(wrapper, wrapped, args_to_skip: set[str] | None):
             if param.arg_name in args_to_skip:
                 continue
 
+            note = DEFAULT_ARGREF_NOTE
+
             if (
                 param.type_name is None
                 and (type_hint := orig_annots.get(param.arg_name)) is not None
             ):
                 param.type_name = _type_to_str(type_hint)
+                if list in {type_hint, get_origin(type_hint)}:
+                    note = LIST_ARGREF_NOTE
 
-            param.description = (param.description or "") + f" {ARGREF_NOTE}"
+            param.description = (param.description or "") + f" {note}"
 
         wrapped_func.__doc__ = compose(ds)
 
@@ -115,6 +118,7 @@ def argref_by_name(  # noqa: C901, PLR0915
         >>> # Equivalent to my_func(state.refs["a"], state.refs["b"])
         >>> wrapped_fxn("a", "b", state=state)  # doctest: +SKIP
     """
+    args_to_skip = (args_to_skip or set()) | {"state", "return"}
 
     def decorator(func):  # noqa: C901, PLR0915
         def get_call_args(*args, **kwargs):  # noqa: C901
@@ -129,26 +133,36 @@ def argref_by_name(  # noqa: C901, PLR0915
 
             # now convert the keynames to actual references (if they are a string)
             # tuple is (arg, if was dereferenced)
-            def maybe_deref_arg(arg):
+            def maybe_deref_arg(arg, must_exist: bool) -> tuple[Any, bool]:
+                try:
+                    refs = state.refs
+                except AttributeError as e:
+                    raise AttributeError(
+                        "The state object must have a 'refs' attribute to use argref_by_name decorator."
+                    ) from e
+
+                if arg in refs:
+                    return [refs[arg]], True
+
                 if isinstance(arg, str):
-                    try:
-                        if arg in state.refs:
-                            return [state.refs[arg]], True
-                        # sometimes it is not correctly converted to a tuple
-                        # so as an attempt to be helpful...
-                        if all(a.strip() in state.refs for a in arg.split(",")):
-                            return [state.refs[a.strip()] for a in arg.split(",")], True
-                        # fall through
-                    except AttributeError as e:
-                        raise AttributeError(
-                            "The state object must have a 'refs' attribute to use argref_by_name decorator."
-                        ) from e
-                return arg, False
+                    # sometimes it is not correctly converted to a tuple
+                    # so as an attempt to be helpful...
+                    split_args = [a.strip() for a in arg.split(",")]
+                    if all(a in refs for a in split_args):
+                        return [refs[a] for a in split_args], True
+
+                if not must_exist:
+                    return arg, False
+
+                raise KeyError(
+                    f'Not a valid element of the current key-value store: "{arg}"'
+                )
 
             # the split thing makes it complicated and we cannot use comprehension
             deref_args = []
             for i, arg in enumerate(args):
-                a, dr = maybe_deref_arg(arg)
+                # In order to support *args, allow arguments that are either ref keys or strings
+                a, dr = maybe_deref_arg(arg, must_exist=False)
                 if dr:
                     deref_args.extend(a)
                 else:
@@ -157,18 +171,21 @@ def argref_by_name(  # noqa: C901, PLR0915
                         # likely the user intended to use a reference
                         raise KeyError(f"The key {arg} is not found in state.")
                     deref_args.append(a)
+
             deref_kwargs = {}
             for k, v in kwargs.items():
-                a, dr = maybe_deref_arg(v)
-                if dr:
-                    if len(a) > 1:
-                        raise ValueError(
-                            f"Multiple values for argument '{k}' found in state. "
-                            "Cannot use comma-separated notation for kwargs."
-                        )
-                    deref_kwargs[k] = a[0]
-                else:
+                if args_to_skip and k in args_to_skip:
+                    deref_kwargs[k] = v
+                    continue
+
+                # In the kwarg case, force arguments to be ref keys (unless in args_to_skip)
+                a, _ = maybe_deref_arg(v, must_exist=True)
+                if len(a) > 1:
+                    # We got multiple items, so pass the whole list
                     deref_kwargs[k] = a
+                else:
+                    # We only got one item - pass it directly
+                    deref_kwargs[k] = a[0]
 
             return deref_args, deref_kwargs, state
 
@@ -234,8 +251,8 @@ def _check_arg_types(func: Callable, args, kwargs) -> None:
         if expected_type and not _isinstance_with_generics(arg, expected_type):
             wrong_types.append((
                 param,
-                expected_type.__name__,
-                type(arg).__name__,
+                _type_to_str(expected_type),
+                _type_to_str(type(arg)),
             ))
 
     # Check keyword arguments
@@ -245,8 +262,8 @@ def _check_arg_types(func: Callable, args, kwargs) -> None:
             wrong_types.append((
                 param,
                 # sometimes need str for generics like Union
-                getattr(expected_type, "__name__", str(expected_type)),
-                type(arg).__name__,
+                _type_to_str(expected_type),
+                _type_to_str(type(arg)),
             ))
 
     if wrong_types:
