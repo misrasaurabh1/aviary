@@ -144,18 +144,28 @@ def argref_by_name(  # noqa: C901, PLR0915
                 if arg in refs:
                     return [refs[arg]], True
 
-                if isinstance(arg, str):
-                    # sometimes it is not correctly converted to a tuple
-                    # so as an attempt to be helpful...
-                    split_args = [a.strip() for a in arg.split(",")]
-                    if all(a in refs for a in split_args):
+                # sometimes it is not correctly converted to a tuple
+                # so as an attempt to be helpful...
+                if (
+                    isinstance(arg, str)
+                    and len(split_args := [a.strip() for a in arg.split(",")]) > 1
+                ):
+                    if not (missing := [a for a in split_args if a not in refs]):
                         return [refs[a] for a in split_args], True
+
+                    if must_exist:
+                        # Error message for the agent - cast back to comma-separated, since that's the format the agent
+                        # is expected to use.
+                        raise KeyError(
+                            f'The following keys are not present in the current key-value store: "{", ".join(missing)}"'
+                        )
 
                 if not must_exist:
                     return arg, False
 
+                # Error message for the agent
                 raise KeyError(
-                    f'Not a valid element of the current key-value store: "{arg}"'
+                    f"Key is not present in the current key-value store: {arg!r}"
                 )
 
             # the split thing makes it complicated and we cannot use comprehension
