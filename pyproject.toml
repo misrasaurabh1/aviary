@@ -38,6 +38,12 @@ image = [
 llm = [
     "litellm",
 ]
+server = [
+    "click",
+    "cloudpickle",
+    "fastapi",
+    "uvicorn",
+]
 typing = [
     "boto3-stubs[s3]",
     "numpy",
@@ -46,6 +52,9 @@ typing = [
 xml = [
     "dicttoxml",
 ]
+
+[project.scripts]
+aviary = "aviary.main:cli"
 
 [project.urls]
 issues = "https://github.com/Future-House/aviary/issues"

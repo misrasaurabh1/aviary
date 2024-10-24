@@ -1,14 +1,19 @@
 import json
+import os
 import pickle
 from collections.abc import Callable, Sequence
 from enum import IntEnum, auto
 from typing import Any
+from unittest.mock import patch
 
 import pytest
+from fastapi.testclient import TestClient
 from pydantic import BaseModel, Field
 from pytest_subtests import SubTests
+from typeguard import suppress_type_checks
 
-from aviary.env import DummyEnv
+from aviary.env import DummyEnv, Environment
+from aviary.message import Message
 from aviary.tools import (
     INVALID_TOOL_NAME,
     FunctionInfo,
@@ -17,6 +22,7 @@ from aviary.tools import (
     ToolRequestMessage,
     argref_by_name,
 )
+from aviary.tools.server import make_tool_server
 
 
 def simple() -> None:
@@ -749,3 +755,52 @@ async def test_argref_by_name_type_checking() -> None:
         with pytest.raises(TypeError):
             # passing list[str], not list[int]
             type_checked_fn(c="str_list_arg", d="int_arg", state=s)
+
+
+@pytest.mark.asyncio
+async def test_make_tool_server():
+    def add(a: int, b: int) -> int:
+        """Add two numbers."""
+        return a + b
+
+    def subtract(a: int, b: int) -> int:
+        """Subtract two numbers.
+
+        Args:
+            a: first number
+            b: second number
+        """
+        return a - b
+
+    class MyEnv(Environment):
+        async def reset(self) -> tuple[list[Message], list[Tool]]:
+            tools = [
+                Tool.from_function(add, allow_empty_param_descriptions=True),
+                Tool.from_function(subtract),
+            ]
+            self.tools = tools
+            return [], tools
+
+        async def step(self, action):
+            return await self.exec_tool_calls(action), False, 0, 0
+
+        async def export_frame(self):
+            pass
+
+    with suppress_type_checks():
+        server = await make_tool_server(MyEnv)
+
+    # make sure there are two endpoints
+    route_names = [route.name for route in server.routes]
+    assert "add" in route_names
+    assert "subtract" in route_names
+
+    # make sure we can call them
+    client = TestClient(server)
+    token = "stub"
+    with patch.dict(os.environ, {"AUTH_TOKEN": token}):
+        response = client.post(
+            "/add", json={"a": 1, "b": 2}, headers={"Authorization": f"Bearer {token}"}
+        )
+        assert response.status_code == 200
+        assert response.json()["result"] == "3"
