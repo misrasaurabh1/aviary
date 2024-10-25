@@ -173,7 +173,7 @@ wheels = [
 
 [[package]]
 name = "aviary-gsm8k"
-version = "0.8.1"
+version = "0.7.1.dev7+g1916485.d20241025"
 source = { editable = "packages/gsm8k" }
 dependencies = [
     { name = "datasets" },
@@ -196,7 +196,7 @@ requires-dist = [
 
 [[package]]
 name = "aviary-hotpotqa"
-version = "0.8.1"
+version = "0.7.1.dev7+g1916485.d20241025"
 source = { editable = "packages/hotpotqa" }
 dependencies = [
     { name = "beautifulsoup4" },
@@ -282,16 +282,16 @@ wheels = [
 
 [[package]]
 name = "boto3"
-version = "1.35.47"
+version = "1.35.48"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "botocore" },
     { name = "jmespath" },
     { name = "s3transfer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/29/4c/32228505d008de09740e778cc3f593d187b831dd6334d24d9bca1924ee7e/boto3-1.35.47.tar.gz", hash = "sha256:65b808e4cf1af8c2f405382d53656a0d92eee8f85c7388c43d64c7a5571b065f", size = 110991 }
+sdist = { url = "https://files.pythonhosted.org/packages/6e/3e/b48efd041192500ea071aecac94315888dfee5aa5ef6fe7e1caa738336df/boto3-1.35.48.tar.gz", hash = "sha256:5007a5cdd09e4db9309adf2ee090455a34ae639bd10a68a1fefca72cd77070fc", size = 110992 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2f/1b/55feb889aeff20f7f3333c03a82904ed0a0612e710f40293c572425f6196/boto3-1.35.47-py3-none-any.whl", hash = "sha256:0b307f685875e9c7857ce21c0d3050d8d4f3778455a6852d5f98ac75194b400e", size = 139161 },
+    { url = "https://files.pythonhosted.org/packages/c4/3b/a9774173c1104f8410de01ee6252e73f931952990861bca6cd0f9f646471/boto3-1.35.48-py3-none-any.whl", hash = "sha256:60889bb6e21f0af662ac9404e00125d3b8a5808f190e89462e5ddf73604adfc1", size = 139160 },
 ]
 
 [[package]]
@@ -315,28 +315,28 @@ s3 = [
 
 [[package]]
 name = "botocore"
-version = "1.35.47"
+version = "1.35.48"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jmespath" },
     { name = "python-dateutil" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/0e/02/eff8e5372c9659fb61721d14d17473e890d7d1a7a1762470d9963d7f8fbf/botocore-1.35.47.tar.gz", hash = "sha256:f8f703463d3cd8b6abe2bedc443a7ab29f0e2ff1588a2e83164b108748645547", size = 12849837 }
+sdist = { url = "https://files.pythonhosted.org/packages/c1/49/4a9e83ad1fb95289d65b9a92df9297d23656037779c5f884c37c247064ae/botocore-1.35.48.tar.gz", hash = "sha256:3e766cc251053c9ef98542fdf225381ed58531769c3811a6282bd7247f7e2bdf", size = 12830701 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2a/1b/d244f4a3d631f3535089c08a15737c7f9f11bb766120a6a196319e55b1f5/botocore-1.35.47-py3-none-any.whl", hash = "sha256:05f4493119a96799ff84d43e78691efac3177e1aec8840cca99511de940e342a", size = 12636917 },
+    { url = "https://files.pythonhosted.org/packages/d4/4c/65dfa7480a41e7bef9ba59605b684d888fa735aff2ee411d2760aea3da6b/botocore-1.35.48-py3-none-any.whl", hash = "sha256:34fa25fd717208b05745e60f271a39636108fa87a3512fbca18e7e6f787a3239", size = 12615928 },
 ]
 
 [[package]]
 name = "botocore-stubs"
-version = "1.35.47"
+version = "1.35.48"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "types-awscrt" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e8/c1/68c1bf263480f9a625d9aba173c9e5aa8b5135993f9f7a0c6bb974df72cf/botocore_stubs-1.35.47.tar.gz", hash = "sha256:397f78e5c9ed951fbb576cc0c544e29b626bd7a3742d463c015c0cc71e1d292c", size = 40559 }
+sdist = { url = "https://files.pythonhosted.org/packages/b4/2b/52b2d1c777236dee0b49f4630262ffb6d4ff0ad3219c5898472f621d631c/botocore_stubs-1.35.48.tar.gz", hash = "sha256:fdb7557fb13a584c5d15263692ed89de8d6bec802c7feb0cd211224384f709e7", size = 40558 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/dc/64/651cf1b7866abd1d5120e7de17ffea1269adba35c582b8dc7e0389927ef1/botocore_stubs-1.35.47-py3-none-any.whl", hash = "sha256:f1ef0cd7c263f02f5ad3583f3ab99106e519b0d04d94f84c64c6afe146f83dff", size = 60136 },
+    { url = "https://files.pythonhosted.org/packages/c6/c7/24caccb5af43ab6fe9934351f39a6c9605c98d4631db5876830a688b08b7/botocore_stubs-1.35.48-py3-none-any.whl", hash = "sha256:af110f0003e867c1febadd6cab49f64e0a25580155b3326e977ebd3e07590096", size = 60135 },
 ]
 
 [[package]]
@@ -598,7 +598,7 @@ wheels = [
 
 [[package]]
 name = "fhaviary"
-version = "0.8.1"
+version = "0.7.1.dev7+g1916485.d20241025"
 source = { editable = "." }
 dependencies = [
     { name = "docstring-parser" },
@@ -609,6 +609,37 @@ dependencies = [
 [package.optional-dependencies]
 cloud = [
     { name = "boto3" },
+]
+dev = [
+    { name = "aviary-gsm8k", extra = ["typing"] },
+    { name = "aviary-hotpotqa" },
+    { name = "boto3-stubs", extra = ["s3"] },
+    { name = "click" },
+    { name = "cloudpickle" },
+    { name = "codeflash" },
+    { name = "dicttoxml" },
+    { name = "fastapi" },
+    { name = "ipython" },
+    { name = "litellm" },
+    { name = "mypy" },
+    { name = "numpy" },
+    { name = "pillow" },
+    { name = "pre-commit" },
+    { name = "pydantic" },
+    { name = "pylint" },
+    { name = "pylint-pydantic" },
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+    { name = "pytest-recording" },
+    { name = "pytest-subtests" },
+    { name = "pytest-sugar" },
+    { name = "pytest-timer", extra = ["colorama"] },
+    { name = "pytest-xdist" },
+    { name = "refurb" },
+    { name = "sqlalchemy", extra = ["aiosqlite"] },
+    { name = "typeguard" },
+    { name = "types-pillow" },
+    { name = "uvicorn" },
 ]
 gsm8k = [
     { name = "aviary-gsm8k" },
@@ -673,46 +704,45 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "aviary-gsm8k", marker = "extra == 'gsm8k'", editable = "packages/gsm8k" },
+    { name = "aviary-gsm8k", extras = ["typing"], marker = "extra == 'dev'", editable = "packages/gsm8k" },
+    { name = "aviary-hotpotqa", marker = "extra == 'dev'", editable = "packages/hotpotqa" },
     { name = "aviary-hotpotqa", marker = "extra == 'hotpotqa'", editable = "packages/hotpotqa" },
     { name = "boto3", marker = "extra == 'cloud'" },
     { name = "boto3-stubs", extras = ["s3"], marker = "extra == 'typing'" },
     { name = "click", marker = "extra == 'server'" },
     { name = "cloudpickle", marker = "extra == 'server'" },
+    { name = "codeflash", marker = "extra == 'dev'" },
     { name = "dicttoxml", marker = "extra == 'xml'" },
     { name = "docstring-parser", specifier = ">=0.16" },
     { name = "fastapi", marker = "extra == 'server'" },
+    { name = "fhaviary", extras = ["image", "llm", "server", "typing", "xml"], marker = "extra == 'dev'", editable = "." },
     { name = "httpx" },
+    { name = "ipython", marker = "extra == 'dev'", specifier = ">=8" },
     { name = "litellm", marker = "extra == 'llm'" },
+    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.8" },
     { name = "numpy", marker = "extra == 'typing'" },
     { name = "pillow", marker = "extra == 'image'" },
+    { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=3.4" },
     { name = "pydantic", specifier = "~=2.0" },
+    { name = "pydantic", marker = "extra == 'dev'", specifier = "~=2.9" },
+    { name = "pylint", marker = "extra == 'dev'", specifier = ">=3.2" },
+    { name = "pylint-pydantic", marker = "extra == 'dev'" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8" },
+    { name = "pytest-asyncio", marker = "extra == 'dev'" },
+    { name = "pytest-recording", marker = "extra == 'dev'" },
+    { name = "pytest-subtests", marker = "extra == 'dev'" },
+    { name = "pytest-sugar", marker = "extra == 'dev'" },
+    { name = "pytest-timer", extras = ["colorama"], marker = "extra == 'dev'" },
+    { name = "pytest-xdist", marker = "extra == 'dev'" },
+    { name = "refurb", marker = "extra == 'dev'", specifier = ">=2" },
+    { name = "sqlalchemy", extras = ["aiosqlite"], marker = "extra == 'dev'", specifier = "~=2.0" },
+    { name = "typeguard", marker = "extra == 'dev'" },
     { name = "types-pillow", marker = "extra == 'typing'" },
     { name = "uvicorn", marker = "extra == 'server'" },
 ]
 
 [package.metadata.requires-dev]
-dev = [
-    { name = "aviary-gsm8k", extras = ["typing"], editable = "packages/gsm8k" },
-    { name = "aviary-hotpotqa", editable = "packages/hotpotqa" },
-    { name = "codeflash" },
-    { name = "fhaviary", extras = ["image", "llm", "server", "typing", "xml"], editable = "." },
-    { name = "ipython", specifier = ">=8" },
-    { name = "mypy", specifier = ">=1.8" },
-    { name = "pre-commit", specifier = ">=3.4" },
-    { name = "pydantic", specifier = "~=2.9" },
-    { name = "pylint", specifier = ">=3.2" },
-    { name = "pylint-pydantic" },
-    { name = "pytest", specifier = ">=8" },
-    { name = "pytest-asyncio" },
-    { name = "pytest-recording" },
-    { name = "pytest-subtests" },
-    { name = "pytest-sugar" },
-    { name = "pytest-timer", extras = ["colorama"] },
-    { name = "pytest-xdist" },
-    { name = "refurb", specifier = ">=2" },
-    { name = "sqlalchemy", extras = ["aiosqlite"], specifier = "~=2.0" },
-    { name = "typeguard" },
-]
+dev = [{ name = "fhaviary", extras = ["dev"], editable = "." }]
 
 [[package]]
 name = "filelock"
@@ -1161,7 +1191,7 @@ wheels = [
 
 [[package]]
 name = "litellm"
-version = "1.50.2"
+version = "1.50.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
@@ -1176,9 +1206,9 @@ dependencies = [
     { name = "tiktoken" },
     { name = "tokenizers" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a7/45/4d54617b267a96f1f7c17c0010ea1aba20e30a3672b873fe92a6001e5952/litellm-1.50.2.tar.gz", hash = "sha256:b244c9a0e069cc626b85fb9f5cc252114aaff1225500da30ce0940f841aef8ea", size = 6096949 }
+sdist = { url = "https://files.pythonhosted.org/packages/9f/21/03023fa77451d27c86431b4d5fb9801aef17d2e1cf9d4f1a60a2437815c8/litellm-1.50.4.tar.gz", hash = "sha256:a7e68ef614f631b58969c2c7a5154a565ba5974558d437c8cd6c8623654880ea", size = 6096326 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/22/f3/89a4d65d1b9286eb5ac6a6e92dd93523d92f3142a832e60c00d5cad64176/litellm-1.50.2-py3-none-any.whl", hash = "sha256:99cac60c78037946ab809b7cfbbadad53507bb2db8ae39391b4be215a0869fdd", size = 6318265 },
+    { url = "https://files.pythonhosted.org/packages/24/bf/d339f95fbac084ba676582e4a9d3d7c4aef09def8f10ce63cc76db279ee6/litellm-1.50.4-py3-none-any.whl", hash = "sha256:cc6992275e24a0bbb4a3b377e6842d45a8510fc85d7f255930a64bb872980a36", size = 6318397 },
 ]
 
 [[package]]
