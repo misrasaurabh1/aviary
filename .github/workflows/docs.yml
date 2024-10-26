@@ -24,13 +24,15 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install sphinx sphinx_rtd_theme
-
-    - name: Generate .rst files using sphinx-apidoc
-      working-directory: ./docs
-      run: sphinx-apidoc -o . ../src/aviary
+        
     - name: Clean previous builds
       working-directory: ./docs
       run: make clean
+      
+    - name: Generate .rst files using sphinx-apidoc
+      working-directory: ./docs
+      run: sphinx-apidoc -o . ../src/aviary
+   
     - name: Build the Sphinx documentation
       working-directory: ./docs
       run: make html
