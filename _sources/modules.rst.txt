@@ -2,8 +2,9 @@ aviary
 ======
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
 
+   core
    env
    env_client
    main
