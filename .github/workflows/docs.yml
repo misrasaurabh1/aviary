@@ -5,20 +5,14 @@ on:
     branches:
       - main  # Change to your default branch
       - docs
-  pull_request:
-    branches:
-      - main  # Optional: build on pull requests to the main branch
-      - docs
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: check out
-      uses: actions/checkout@v3
-      with:
-        ref: docs
+    - uses: actions/checkout@v4
     - uses: actions/setup-python@v4
     - name: Install dependencies
       run: |
@@ -41,5 +35,5 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages
+        cname: aviary.bio
         publish_dir: docs/_build/html
