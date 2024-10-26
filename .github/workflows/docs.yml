@@ -24,7 +24,7 @@ jobs:
 
     - name: Build the Sphinx documentation
       working-directory: ./docs
-      run: make html
+      run: sphinx-apidoc -o . ../src/aviary && make clean && make html
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
