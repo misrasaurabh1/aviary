@@ -15,7 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: check out
+      uses: actions/checkout@v3
+      with:
+        ref: docs
     - uses: actions/setup-python@v4
     - name: Install dependencies
       run: |
@@ -30,5 +33,5 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: docs
+        publish_branch: gh-pages
         publish_dir: docs/_build/html
