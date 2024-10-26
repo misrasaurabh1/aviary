@@ -43,16 +43,10 @@ As of 10/25/2024, unfortunately Google Colab does not yet support Python 3.11 or
 ([issue](https://github.com/googlecolab/colabtools/issues/3190)).
 
 Thus, as a workaround, you will need to install Python 3.11 into your notebook.
-Here is a simple snippet that will do that for you:
+Here is a sample notebook showing how to do this:
+https://colab.research.google.com/drive/1mejZ5cxgKZrMpYEe0iRoanaGGQ0Cr6WI?usp=sharing
 
-```bash
-!sudo apt update > /dev/null
-!sudo apt-get install python3.11 python3.11-dev python3.11-distutils python3.11-venv > /dev/null
-!curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11  > /dev/null
-!sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1 > /dev/null
-!sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 2 > /dev/null
-!sudo apt autoremove > /dev/null
-```
+Also, note that `async` code works in Google Colab.
 
 ### Developer Installation
 
@@ -71,12 +65,12 @@ For the meaning of role, see the table below.
 You can change around roles as desired,
 except for `tool` which has a special meaning in aviary.
 
-| Role      | Host                    | Example                              |
-| --------- | ----------------------- | ------------------------------------ |
-| assistant | AI                      | ChatGPT                              |
-| system    | AI system prompt        | You are an AI assistant              |
-| user      | User                    | You, using ChatGPT                   |
-| tool      | Tool in the environment | Some custom number crunching program |
+| Role      | Host                        | Example                                 |
+| --------- | --------------------------- | --------------------------------------- |
+| assistant | Agent                       | Tool selector agent with an environment |
+| system    | Agent system prompt         | "You are an agent."                     |
+| user      | Environment system prompt   | HotPotQA problem to solve               |
+| tool      | Tool run in the environment | Some custom number crunching program    |
 
 The `content` is a string that can be anything, or a null value.
 
@@ -151,7 +145,7 @@ exposed to the agent as a possible parameter and will be injected by the environ
 signature).
 
 ```py
-def print_story(story: str, state: ExampleState) -> None:
+def print_story(story: str, state: ExampleState):
     """Print a story.
 
     Args:
@@ -190,7 +184,7 @@ This convention was created by FastAPI ([docs][1]).
 [1]: https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/#advanced-description-from-docstring
 
 ```python
-def print_story(story: str | bytes, state: ExampleState) -> None:
+def print_story(story: str | bytes, state: ExampleState):
     r"""Print a story.
 
     Extra information that is part of the tool description.
@@ -218,11 +212,9 @@ The `reset` function is `async` to allow for database interactions or HTTP reque
 from aviary.core import Message, Tool
 
 
-async def reset(self) -> tuple[list[Message], list[Tool]]:
+async def reset(self):
     self.tools = [Tool.from_function(ExampleEnv.print_story)]
-
     start = Message(content="Write a 5 word story and call print")
-
     return [start], self.tools
 ```
 
@@ -235,8 +227,8 @@ the episode was truncated.
 from aviary.core import Message
 
 
-async def step(self, action: Message) -> tuple[list[Message], float, bool, bool]:
-    msgs: list[Message] = await self.exec_tool_calls(action, state=self.state)
+async def step(self, action: Message):
+    msgs = await self.exec_tool_calls(action, state=self.state)
     return msgs, self.state.reward, self.state.done, False
 ```
 
@@ -251,7 +243,7 @@ and its state for visualization or debugging purposes.
 from aviary.core import Frame
 
 
-def export_frame(self) -> Frame:
+def export_frame(self):
     return Frame(
         state={"done": self.state.done, "reward": self.state.reward},
         info={"tool_names": [t.info.name for t in self.tools]},
