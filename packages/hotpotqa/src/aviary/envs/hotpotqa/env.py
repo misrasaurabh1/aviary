@@ -8,9 +8,9 @@ In The Eleventh International Conference on Learning Representations. 2023
 Agents in the HotPotQA environment can perform searches and lookups to retrieve specific information.
 The environment supports 3 tools:
 
-Search[entity]: Search for a specific entity on Wikipedia and return relevant information.
-Lookup[keyword]: Find and return the next sentence containing the keyword in the current passage.
-Finish[answer]: Submit the final answer to the question and conclude the task.
+search[entity]: Search for a specific entity on Wikipedia and return relevant information.
+lookup[keyword]: Find and return the next sentence containing the keyword in the current passage.
+submit_answer[answer]: Submit the final answer to the question and conclude the task.
 """
 
 import logging
@@ -206,9 +206,9 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
 
         # Title case tool names to match third party demonstration data
         self.tools = [
-            create_tool(self.search, "Search"),
-            create_tool(self.construct_lookup_list, "Lookup"),
-            create_tool(self.finish, "Finish"),
+            Tool.from_function(self.search),
+            Tool.from_function(self.lookup),
+            Tool.from_function(self.submit_answer),
         ]
 
     @classmethod
@@ -246,7 +246,7 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
         Returns:
             tuple: A tuple containing:
                 - list[Message]: The initial observation wrapped in a Message object.
-                - list[Tool]: A list of tools (Search, Lookup, and Finish) available for the agent.
+                - list[Tool]: A list of tools (search, lookup, and submit_answer) available for the agent.
 
         Example:
             >>> env = HotPotQAEnv()
@@ -254,7 +254,7 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
             >>> print(initial_obs)
             [Message(content='Question: <question_text>')]
             >>> print(tools)
-            [<Tool: Search>, <Tool: Lookup>, <Tool: Finish>]
+            [<Tool: search>, <Tool: lookup>, <Tool: submit_answer>]
         """
         self.state = self.State()
         return [Message(content=f"Question: {self.question}")], self.tools
@@ -357,7 +357,7 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
             }
         )
 
-    async def finish(self, answer: str) -> str:
+    async def submit_answer(self, answer: str) -> str:
         """Finish the task by submitting an answer to the question.
 
         Args:
@@ -365,7 +365,7 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
         """
         self.state.done = True
         if not answer:
-            return "Finish failed. No answer provided."
+            return "submit_answer failed since it was provided an empty answer."
 
         self.state.answer = answer
         self.state.reward += await self.calculate_answer_reward(answer)
@@ -438,7 +438,7 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
         self.state.last_action_is_lookup = False
         return " ".join(obs_list[:5])
 
-    def construct_lookup_list(self, keyword: str) -> str:
+    def lookup(self, keyword: str) -> str:
         """Construct a list of sentences from the given page content that contain the specified keyword.
 
         Args:
@@ -456,7 +456,7 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
             Kearney Zzyzwicz. Milhouse has a crush on Bart's sister, Lisa, a common plot element.")
 
             keyword = "Milhouse"
-            result = construct_lookup_list_from_page(keyword, page_content)
+            result = lookup(keyword, page_content)
             # Output: ['Milhouse Mussolini Van Houten is a recurring character in the Fox animated television series The
             Simpsons.',
             'Milhouse is Bart Simpson's best friend in Mrs. Krabappel's fourth grade class at Springfield Elementary
