@@ -14,6 +14,7 @@ submit_answer[answer]: Submit the final answer to the question and conclude the 
 """
 
 import logging
+import os
 import random
 import re
 import string
@@ -22,6 +23,7 @@ from enum import StrEnum
 from typing import Any, ClassVar, cast
 
 import httpx
+from brave import Brave
 from bs4 import BeautifulSoup
 from datasets import load_dataset
 from pydantic import BaseModel, ConfigDict, Field
@@ -196,6 +198,7 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
         self.tool_failure_reward = tool_failure_reward
         self.proxy = proxy
         self.evaluation_mode = evaluation_mode
+        self.brave = Brave()
 
         if evaluation_mode == EvalAnswerMode.LLM_SCORE:
             raise NotImplementedError(
@@ -210,6 +213,14 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
             Tool.from_function(self.lookup),
             Tool.from_function(self.submit_answer),
         ]
+
+        if os.environ.get("BRAVE_API_KEY") is None:
+            logger.warning(
+                "No Brave API key found in the environment. Please set the BRAVE_API_KEY"
+                " environment variable to use the browser search tool."
+            )
+        else:
+            self.tools.append(Tool.from_function(self.brower_search))
 
     @classmethod
     def from_task(cls, task: str) -> "HotPotQAEnv":
@@ -437,6 +448,24 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
         ]
         self.state.last_action_is_lookup = False
         return " ".join(obs_list[:5])
+
+    async def brower_search(self, entity: str) -> str:
+        """Searches on brave search browser for the given entity and processes the results.
+
+        Args:
+            entity: The entity to search for on brave search browser.
+
+        Functionality:
+            - Constructs and sends a search query to Brave.
+            - Parses and returns the search results.
+        """
+        import ipdb; ipdb.set_trace()
+        search_results = self.availablebrave.search(q=entity, count=10)
+        output = [
+            f"{result['title']}: {result['description']}" for result in search_results
+        ]
+        import ipdb; ipdb.set_trace()
+        return "\n".join(output)
 
     def lookup(self, keyword: str) -> str:
         """Construct a list of sentences from the given page content that contain the specified keyword.
