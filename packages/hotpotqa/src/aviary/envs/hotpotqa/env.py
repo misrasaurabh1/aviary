@@ -199,6 +199,7 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
         self.tool_failure_reward = tool_failure_reward
         self.proxy = proxy
         self.evaluation_mode = evaluation_mode
+        self.brave = Brave()
 
         if evaluation_mode == EvalAnswerMode.LLM_SCORE:
             raise NotImplementedError(
@@ -220,7 +221,7 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
                 " environment variable to use the browser search tool."
             )
         else:
-            self.tools.append(Tool.from_function(self.google_search))
+            self.tools.append(Tool.from_function(self.search_engine))
 
     @classmethod
     def from_task(cls, task: str) -> "HotPotQAEnv":
@@ -449,16 +450,22 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
         self.state.last_action_is_lookup = False
         return " ".join(obs_list[:5])
 
-    async def google_search(self, entity: str) -> str:
-        """Searches on the google search engine for the given entity and get snippets of top 3 results.
+    async def search_engine(self, entity: str) -> str:
+        """Searches on a search engine for the given entity and get snippets of top results.
 
         Args:
             entity: The entity to search for on google search engine.
 
         Functionality:
-            - Constructs and sends a search query to Brave.
+            - Sends a the entity  as a query to the search engine.
             - Parses and returns the search results.
         """
+        search_results = await self.brave.search(q=entity, count=3)        
+        output = [
+            f"{result['title']}: {result['description']}" for result in search_results.web_results
+        ]
+        return "\n\n".join(output)
+
         data = await web_search(entity)
         return data
 
