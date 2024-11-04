@@ -21,9 +21,10 @@ import string
 from collections.abc import Callable
 from enum import StrEnum
 from typing import Any, ClassVar, cast
+from aviary_internal.envs.tools.search import web_search
 
 import httpx
-from brave import Brave
+from brave import AsyncBrave, Brave
 from bs4 import BeautifulSoup
 from datasets import load_dataset
 from pydantic import BaseModel, ConfigDict, Field
@@ -198,7 +199,6 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
         self.tool_failure_reward = tool_failure_reward
         self.proxy = proxy
         self.evaluation_mode = evaluation_mode
-        self.brave = Brave()
 
         if evaluation_mode == EvalAnswerMode.LLM_SCORE:
             raise NotImplementedError(
@@ -209,7 +209,7 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
 
         # Title case tool names to match third party demonstration data
         self.tools = [
-            Tool.from_function(self.search),
+            Tool.from_function(self.wikipedia_search),
             Tool.from_function(self.lookup),
             Tool.from_function(self.submit_answer),
         ]
@@ -220,7 +220,7 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
                 " environment variable to use the browser search tool."
             )
         else:
-            self.tools.append(Tool.from_function(self.brower_search))
+            self.tools.append(Tool.from_function(self.google_search))
 
     @classmethod
     def from_task(cls, task: str) -> "HotPotQAEnv":
@@ -384,7 +384,7 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
         self.state.last_action_is_lookup = False
         return "Finished."
 
-    async def search(self, entity: str) -> str:
+    async def wikipedia_search(self, entity: str) -> str:
         """Searches Wikipedia for the given entity and processes the results.
 
         Args:
@@ -430,7 +430,7 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
 
         page = [p.get_text().strip() for p in soup.find_all("p") + soup.find_all("ul")]
         if any("may refer to:" in p for p in page):  # Recurse
-            return await self.search(entity="[" + entity + "]")
+            return await self.wikipedia_search(entity="[" + entity + "]")
         # Clean up any unicode
         self.state.page = ""
         for p in page:
@@ -449,23 +449,18 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
         self.state.last_action_is_lookup = False
         return " ".join(obs_list[:5])
 
-    async def brower_search(self, entity: str) -> str:
-        """Searches on brave search browser for the given entity and processes the results.
+    async def google_search(self, entity: str) -> str:
+        """Searches on the google search engine for the given entity and get snippets of top 3 results.
 
         Args:
-            entity: The entity to search for on brave search browser.
+            entity: The entity to search for on google search engine.
 
         Functionality:
             - Constructs and sends a search query to Brave.
             - Parses and returns the search results.
         """
-        import ipdb; ipdb.set_trace()
-        search_results = self.availablebrave.search(q=entity, count=10)
-        output = [
-            f"{result['title']}: {result['description']}" for result in search_results
-        ]
-        import ipdb; ipdb.set_trace()
-        return "\n".join(output)
+        data = await web_search(entity)
+        return data
 
     def lookup(self, keyword: str) -> str:
         """Construct a list of sentences from the given page content that contain the specified keyword.
