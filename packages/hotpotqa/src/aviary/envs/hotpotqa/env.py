@@ -21,10 +21,10 @@ import string
 from collections.abc import Callable
 from enum import StrEnum
 from typing import Any, ClassVar, cast
-from aviary_internal.envs.tools.search import web_search
+from urllib.parse import urljoin
 
 import httpx
-from brave import AsyncBrave, Brave
+from aiohttp import ClientSession
 from bs4 import BeautifulSoup
 from datasets import load_dataset
 from pydantic import BaseModel, ConfigDict, Field
@@ -43,6 +43,10 @@ from aviary.core import (
 )
 
 logger = logging.getLogger(__name__)
+
+# Brave Search API host and path
+API_HOST = "https://api.search.brave.com"
+API_PATH = urljoin(API_HOST, "res/v1/web/search")
 
 
 # Jitter in case we have lots of requests at once, to space them out slightly
@@ -199,7 +203,6 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
         self.tool_failure_reward = tool_failure_reward
         self.proxy = proxy
         self.evaluation_mode = evaluation_mode
-        self.brave = Brave()
 
         if evaluation_mode == EvalAnswerMode.LLM_SCORE:
             raise NotImplementedError(
@@ -221,7 +224,7 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
                 " environment variable to use the browser search tool."
             )
         else:
-            self.tools.append(Tool.from_function(self.search_engine))
+            self.tools.append(Tool.from_function(self.web_search))
 
     @classmethod
     def from_task(cls, task: str) -> "HotPotQAEnv":
@@ -450,24 +453,51 @@ class HotPotQAEnv(Environment[HotPotQAEnvState]):
         self.state.last_action_is_lookup = False
         return " ".join(obs_list[:5])
 
-    async def search_engine(self, entity: str) -> str:
-        """Searches on a search engine for the given entity and get snippets of top results.
+    async def web_search(self, entity: str) -> str:
+        """
+        Searches the web for the specified entity using a search engine and retrieves snippets from the top results.
 
         Args:
-            entity: The entity to search for on google search engine.
+            entity: The entity to search for on a web search engine.
 
         Functionality:
-            - Sends a the entity  as a query to the search engine.
-            - Parses and returns the search results.
+            - Sends the specified entity as a query to a search engine.
+            - Parses and returns snippets from the top search results.
         """
-        search_results = await self.brave.search(q=entity, count=3)        
+        # Request headers
+        BRAVE_API_KEY = os.environ.get("BRAVE_API_KEY", "")
+        if not BRAVE_API_KEY:
+            raise ValueError("API key is not set for the Brave API.")
+
+        API_HEADERS = {
+            "X-Subscription-Token": BRAVE_API_KEY,
+            "Api-Version": "2023-10-11",
+        }
+        SUCCESS_STATUS_CODE = 200
+
+        # Ensure all values in params are of compatible types
+        params = {
+            "q": entity,
+            "count": "5",  # Convert to string if necessary
+            "text_decorations": "0",
+            "result_filter": "web",
+        }
+
+        async with (
+            ClientSession() as session,
+            session.get(API_PATH, params=params, headers=API_HEADERS) as response,
+        ):
+            data = await response.json()
+            search_results = (
+                []
+                if response.status != SUCCESS_STATUS_CODE
+                else data.get("web", {}).get("results", [])
+            )
+
         output = [
-            f"{result['title']}: {result['description']}" for result in search_results.web_results
+            f"{result['title']}: {result['description']}" for result in search_results
         ]
         return "\n\n".join(output)
-
-        data = await web_search(entity)
-        return data
 
     def lookup(self, keyword: str) -> str:
         """Construct a list of sentences from the given page content that contain the specified keyword.
