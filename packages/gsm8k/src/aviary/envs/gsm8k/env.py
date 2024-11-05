@@ -1,5 +1,6 @@
 import contextlib
 import json
+import re
 from enum import StrEnum
 from logging import getLogger
 from typing import TYPE_CHECKING, ClassVar, Literal
@@ -9,12 +10,30 @@ from pydantic import BaseModel, ConfigDict
 
 from aviary.env import Environment, Frame, TaskDataset
 from aviary.message import Message
-from aviary.tools import Tool, ToolRequestMessage, ToolResponseMessage
+from aviary.tools import Tool, ToolRequestMessage, ToolResponseMessage, eval_answer
 
 if TYPE_CHECKING:
     import pandas as pd
 
 logger = getLogger(__name__)
+
+
+ANS_RE = re.compile(r"#### (\-?[0-9\.\,]+)")
+INVALID_ANS = "[invalid]"
+
+
+def openai_extract_answer(completion):
+    match = ANS_RE.search(completion)
+    if match:
+        match_str = match.group(1).strip()
+        return match_str.replace(",", "")
+    return INVALID_ANS
+
+
+def extract_last_number_from_prediction(pred: str) -> str:
+    pred = pred.replace(",", "")
+    numbers = list(re.findall(r"-?\d+\.?\d*", pred))
+    return numbers[-1] if numbers else ""
 
 
 class CalculatorEnvConfig(BaseModel):
@@ -42,7 +61,7 @@ class CalculatorEnv(Environment[None]):
         # or re-initialized by .reset().
         self.problem_id = problem_id
         self.problem = problem
-        self.answer = float(answer)  # If passed in as a 0d tensor  # noqa: FURB123
+        self.answer = answer
 
         self.config = config if config is not None else CalculatorEnvConfig()
 
@@ -119,19 +138,12 @@ class CalculatorEnv(Environment[None]):
                 tool_failure_reward if tool failure, otherwise incorrect_reward), and
                 True indicating done.
         """
-        try:
-            correct: bool = (
-                abs(float(answer) - self.answer)
-                / (abs(self.answer) + self.config.rel_tol)
-                < self.config.rel_tol
-            )
-            reward = (
-                self.config.correct_reward if correct else self.config.incorrect_reward
-            )
-        except ValueError:
-            return False, self.config.tool_failure_reward, True
-        else:
-            return correct, reward, True
+        correct = eval_answer(
+            proposed=extract_last_number_from_prediction(answer),
+            correct=openai_extract_answer(self.answer),
+        )
+        reward = self.config.correct_reward if correct else self.config.incorrect_reward
+        return correct, reward, True
 
     def calculator(self, expr: str) -> tuple[float | str | None, float, bool]:
         """Calculate a mathematical expression.
@@ -237,7 +249,7 @@ class GSM8kDataset(TaskDataset):
         return CalculatorEnv(
             problem_id=row["problem_id"],
             problem=row["question"],
-            answer=row["answer_num"],
+            answer=row["answer"],
             config=self.config,
         )
 
