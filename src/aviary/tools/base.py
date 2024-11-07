@@ -21,8 +21,10 @@ from pydantic import (
 )
 from pydantic.fields import FieldInfo
 
-from aviary.message import Message
 from aviary.utils import partial_format
+
+# from llmclient.message import LLMMessage as Message
+from aviary.core import Message
 
 try:
     from dicttoxml import dicttoxml

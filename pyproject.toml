@@ -26,6 +26,7 @@ dependencies = [
     "docstring_parser>=0.16",  # Pin for description addition
     "httpx",
     "pydantic~=2.0",
+    "llm-client @ git+ssh://git@github.com/Future-House/llm-client.git@main"
 ]
 description = "Gymnasium framework for training language model agents on constructive tasks"
 dynamic = ["version"]
