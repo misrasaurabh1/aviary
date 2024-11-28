@@ -7,17 +7,17 @@ from contextlib import contextmanager
 from itertools import starmap
 from typing import Generic, TypeVar
 
-import uvicorn
 from pydantic import BaseModel, Field
 
 from aviary.env import Environment, TaskDataset
 from aviary.tools import MessagesAdapter, ToolRequestMessage, ToolsAdapter
 
 try:
+    import uvicorn
     from fastapi import FastAPI, HTTPException
 except ImportError:
-    # We will raise if a TaskDatasetServer is instantiated but fastapi is not available
-    FastAPI = HTTPException = None  # type: ignore[misc,assignment]
+    # We will raise if a TaskDatasetServer is instantiated but FastAPI/uvicorn are not available
+    uvicorn = FastAPI = HTTPException = None  # type: ignore[misc,assignment]
 
 logger = logging.getLogger(__name__)
 
@@ -61,8 +61,8 @@ class TaskDatasetServer(Generic[TEnvironment]):
     ):
         if FastAPI is None:
             raise ImportError(
-                "FastAPI is required to run a TaskDatasetServer. "
-                "Please `pip install aviary[server]`."
+                "FastAPI and Uvicorn are required to run a TaskDatasetServer. "
+                "Please `pip install fhaviary[server]`."
             )
 
         self.dataset = dataset
