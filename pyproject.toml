@@ -41,6 +41,7 @@ cloud = [
 dev = [
     "aviary.gsm8k[typing]",
     "aviary.hotpotqa",
+    "fh-llm-client @ git+ssh://git@github.com/Future-House/llm-client#dev",  # TODO: change it to fh-llm-client after next release
     "fhaviary[image,llm,server,typing,xml]",
     "ipython>=8",  # Pin to keep recent
     "mypy>=1.8",  # Pin for mutable-override
