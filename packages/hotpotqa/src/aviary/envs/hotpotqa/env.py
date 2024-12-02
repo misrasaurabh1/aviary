@@ -25,6 +25,7 @@ from typing import Any, ClassVar, cast
 import httpx
 from bs4 import BeautifulSoup
 from datasets import load_dataset
+from llmclient.messages import Message
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 from tenacity import retry, stop_after_attempt, wait_exponential_jitter
 
@@ -32,7 +33,6 @@ from aviary.core import (
     Environment,
     EvalAnswerMode,
     Frame,
-    Message,
     Messages,
     TaskDataset,
     Tool,

@@ -5,12 +5,12 @@ from logging import getLogger
 from typing import TYPE_CHECKING, ClassVar, Literal
 
 import datasets
+from llmclient.messages import Message
 from pydantic import BaseModel, ConfigDict
 
 from aviary.core import (
     Environment,
     Frame,
-    Message,
     Messages,
     TaskDataset,
     Tool,
