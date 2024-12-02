@@ -180,7 +180,7 @@ wheels = [
 
 [[package]]
 name = "aviary-gsm8k"
-version = "0.10.1.dev5+gd171edd"
+version = "0.10.1.dev7+g35c7a59.d20241126"
 source = { editable = "packages/gsm8k" }
 dependencies = [
     { name = "datasets" },
@@ -203,7 +203,7 @@ requires-dist = [
 
 [[package]]
 name = "aviary-hotpotqa"
-version = "0.10.1.dev5+gd171edd"
+version = "0.10.1.dev7+g35c7a59.d20241126"
 source = { editable = "packages/hotpotqa" }
 dependencies = [
     { name = "beautifulsoup4" },
@@ -727,8 +727,31 @@ wheels = [
 ]
 
 [[package]]
+name = "fh-llm-client"
+version = "0.0.2.dev7+g7d8eec6"
+source = { git = "ssh://git@github.com/Future-House/llm-client#7d8eec622960f9b857331bda258bfd874e7076c5" }
+dependencies = [
+    { name = "aiofiles" },
+    { name = "coredis" },
+    { name = "dm-tree" },
+    { name = "fhaviary" },
+    { name = "httpx" },
+    { name = "limits" },
+    { name = "litellm" },
+    { name = "networkx", extra = ["default"] },
+    { name = "numpy" },
+    { name = "pydantic" },
+    { name = "pymupdf" },
+    { name = "tenacity" },
+    { name = "tiktoken" },
+    { name = "tqdm" },
+    { name = "typing-extensions", marker = "python_full_version < '3.12'" },
+    { name = "usearch" },
+]
+
+[[package]]
 name = "fhaviary"
-version = "0.10.1.dev5+gd171edd"
+version = "0.10.1.dev8+g98a5626.d20241202"
 source = { editable = "." }
 dependencies = [
     { name = "docstring-parser" },
@@ -748,6 +771,7 @@ dev = [
     { name = "cloudpickle" },
     { name = "dicttoxml" },
     { name = "fastapi" },
+    { name = "fh-llm-client" },
     { name = "ipython" },
     { name = "litellm" },
     { name = "mypy" },
@@ -809,6 +833,7 @@ codeflash = [
     { name = "codeflash" },
     { name = "dicttoxml" },
     { name = "fastapi" },
+    { name = "fh-llm-client" },
     { name = "ipython" },
     { name = "litellm" },
     { name = "mypy" },
@@ -838,6 +863,7 @@ dev = [
     { name = "cloudpickle" },
     { name = "dicttoxml" },
     { name = "fastapi" },
+    { name = "fh-llm-client" },
     { name = "ipython" },
     { name = "litellm" },
     { name = "mypy" },
@@ -873,6 +899,7 @@ requires-dist = [
     { name = "dicttoxml", marker = "extra == 'xml'" },
     { name = "docstring-parser", specifier = ">=0.16" },
     { name = "fastapi", marker = "extra == 'server'" },
+    { name = "fh-llm-client", marker = "extra == 'dev'", git = "ssh://git@github.com/Future-House/llm-client" },
     { name = "fhaviary", extras = ["image", "llm", "server", "typing", "xml"], marker = "extra == 'dev'", editable = "." },
     { name = "httpx" },
     { name = "ipython", marker = "extra == 'dev'", specifier = ">=8" },
@@ -2275,16 +2302,16 @@ wheels = [
 
 [[package]]
 name = "pydantic"
-version = "2.10.2"
+version = "2.10.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "annotated-types" },
     { name = "pydantic-core" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/41/86/a03390cb12cf64e2a8df07c267f3eb8d5035e0f9a04bb20fb79403d2a00e/pydantic-2.10.2.tar.gz", hash = "sha256:2bc2d7f17232e0841cbba4641e65ba1eb6fafb3a08de3a091ff3ce14a197c4fa", size = 785401 }
+sdist = { url = "https://files.pythonhosted.org/packages/c4/bd/7fc610993f616d2398958d0028d15eaf53bde5f80cb2edb7aa4f1feaf3a7/pydantic-2.10.1.tar.gz", hash = "sha256:a4daca2dc0aa429555e0656d6bf94873a7dc5f54ee42b1f5873d666fb3f35560", size = 783717 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d5/74/da832196702d0c56eb86b75bfa346db9238617e29b0b7ee3b8b4eccfe654/pydantic-2.10.2-py3-none-any.whl", hash = "sha256:cfb96e45951117c3024e6b67b25cdc33a3cb7b2fa62e239f7af1378358a1d99e", size = 456364 },
+    { url = "https://files.pythonhosted.org/packages/e0/fc/fda48d347bd50a788dd2a0f318a52160f911b86fc2d8b4c86f4d7c9bceea/pydantic-2.10.1-py3-none-any.whl", hash = "sha256:a8d20db84de64cf4a7d59e899c2caf0fe9d660c7cfc482528e7020d7dd189a7e", size = 455329 },
 ]
 
 [[package]]
