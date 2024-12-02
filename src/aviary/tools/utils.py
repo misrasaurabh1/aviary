@@ -3,9 +3,9 @@ from enum import StrEnum
 from functools import partial
 from typing import TYPE_CHECKING, Any, ClassVar, cast
 
+from llmclient.exceptions import MalformedMessageError
+from llmclient.messages import Message
 from pydantic import BaseModel, Field
-
-from aviary.message import MalformedMessageError, Message
 
 from .base import (
     MessagesAdapter,

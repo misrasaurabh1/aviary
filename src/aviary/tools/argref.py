@@ -8,7 +8,7 @@ from typing import Any, Union, get_args, get_origin
 
 from docstring_parser import compose, parse
 
-from aviary.utils import is_coroutine_callable
+from llmclient.utils import is_coroutine_callable
 
 
 def make_pretty_id(prefix: str = "") -> str:

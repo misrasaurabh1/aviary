@@ -8,6 +8,7 @@ from itertools import starmap
 from typing import Annotated, Any, Literal, NoReturn, Self, TypeAlias
 
 from docstring_parser import DocstringParam, DocstringStyle, parse
+from llmclient.messages import Message
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -21,7 +22,6 @@ from pydantic import (
 )
 from pydantic.fields import FieldInfo
 
-from aviary.message import Message
 from aviary.utils import partial_format
 
 try:

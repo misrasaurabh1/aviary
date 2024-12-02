@@ -2,9 +2,9 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 import httpx
+from llmclient.messages import Message
 
 from aviary.env import Environment, TEnvState
-from aviary.message import Message
 from aviary.tools import MessagesAdapter, Tool, ToolRequestMessage, ToolsAdapter
 
 

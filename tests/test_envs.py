@@ -8,6 +8,7 @@ from typing import ClassVar
 
 import litellm
 import pytest
+from llmclient.messages import Message
 from pydantic import BaseModel
 from pytest_subtests import SubTests
 
@@ -16,7 +17,6 @@ from aviary.core import (
     DummyEnvState,
     Environment,
     Frame,
-    Message,
     Renderer,
     TaskDataset,
     Tool,

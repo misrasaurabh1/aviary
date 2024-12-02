@@ -11,6 +11,7 @@ from collections.abc import Iterator
 from copy import deepcopy
 from typing import Annotated, Generic, Self, TypeAlias, TypeVar, cast
 
+from llmclient.messages import Message
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -21,7 +22,6 @@ from pydantic import (
     field_validator,
 )
 
-from aviary.message import Message
 from aviary.tools import (
     Messages,
     Tool,
@@ -29,7 +29,7 @@ from aviary.tools import (
     ToolRequestMessage,
     ToolResponseMessage,
 )
-from aviary.utils import is_coroutine_callable
+from llmclient.utils import is_coroutine_callable
 
 logger = logging.getLogger(__name__)
 

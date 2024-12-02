@@ -9,7 +9,6 @@ from aviary.env import (
     TaskDataset,
 )
 from aviary.env_client import EnvironmentClient
-from aviary.message import EnvStateMessage, MalformedMessageError, Message, join
 from aviary.render import Renderer
 from aviary.tools import (
     INVALID_TOOL_NAME,
@@ -31,7 +30,7 @@ from aviary.tools import (
     eval_answer,
     wraps_doc_only,
 )
-from aviary.utils import encode_image_to_base64, is_coroutine_callable, partial_format
+from aviary.utils import partial_format
 
 __all__ = [
     "INVALID_TOOL_NAME",
@@ -39,14 +38,11 @@ __all__ = [
     "DummyEnv",
     "DummyEnvState",
     "DummyTaskDataset",
-    "EnvStateMessage",
     "Environment",
     "EnvironmentClient",
     "EvalAnswerMode",
     "Frame",
     "FunctionInfo",
-    "MalformedMessageError",
-    "Message",
     "Messages",
     "MessagesAdapter",
     "Parameters",
@@ -63,10 +59,7 @@ __all__ = [
     "Tools",
     "ToolsAdapter",
     "argref_by_name",
-    "encode_image_to_base64",
     "eval_answer",
-    "is_coroutine_callable",
-    "join",
     "partial_format",
     "wraps_doc_only",
 ]

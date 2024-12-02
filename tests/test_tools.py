@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 import pytest
 from fastapi.testclient import TestClient
+from llmclient.messages import Message
 from pydantic import BaseModel, Field
 from pytest_subtests import SubTests
 from typeguard import suppress_type_checks
@@ -17,7 +18,6 @@ from aviary.core import (
     DummyEnv,
     Environment,
     FunctionInfo,
-    Message,
     Tool,
     ToolCall,
     ToolRequestMessage,
