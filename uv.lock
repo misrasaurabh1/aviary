@@ -728,8 +728,8 @@ wheels = [
 
 [[package]]
 name = "fh-llm-client"
-version = "0.0.2.dev10+g60be25c"
-source = { git = "ssh://git@github.com/Future-House/llm-client#60be25c600283fa034ef803c76c197ddad1de215" }
+version = "0.1.dev37+g250d03e.d20241203"
+source = { directory = "../llm-client" }
 dependencies = [
     { name = "aiofiles" },
     { name = "coredis" },
@@ -749,12 +749,68 @@ dependencies = [
     { name = "usearch" },
 ]
 
+[package.metadata]
+requires-dist = [
+    { name = "aiofiles" },
+    { name = "coredis" },
+    { name = "dm-tree" },
+    { name = "fastapi", marker = "extra == 'server'", specifier = ">=0.109" },
+    { name = "fh-llm-client", extras = ["local", "monitor", "nn", "rich", "server", "typing", "visualization"], marker = "extra == 'dev'" },
+    { name = "fhaviary", directory = "." },
+    { name = "fhaviary", extras = ["xml"], marker = "extra == 'dev'" },
+    { name = "httpx" },
+    { name = "ipython", marker = "extra == 'dev'", specifier = ">=8" },
+    { name = "limits" },
+    { name = "litellm", specifier = ">=1.44" },
+    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.8" },
+    { name = "networkx", extras = ["default"], specifier = "~=3.4" },
+    { name = "numpy" },
+    { name = "pillow", marker = "extra == 'image'" },
+    { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=3.4" },
+    { name = "pydantic", specifier = "~=2.0,>=2.10.1,<2.10.2" },
+    { name = "pydantic", marker = "extra == 'dev'", specifier = "~=2.0" },
+    { name = "pydot", marker = "extra == 'visualization'", specifier = ">=3.0.1" },
+    { name = "pylint-pydantic", marker = "extra == 'dev'" },
+    { name = "pymupdf", specifier = ">=1.24.12" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8" },
+    { name = "pytest-asyncio", marker = "extra == 'dev'" },
+    { name = "pytest-mock", marker = "extra == 'dev'" },
+    { name = "pytest-recording", marker = "extra == 'dev'" },
+    { name = "pytest-rerunfailures", marker = "extra == 'dev'" },
+    { name = "pytest-subtests", marker = "extra == 'dev'" },
+    { name = "pytest-sugar", marker = "extra == 'dev'" },
+    { name = "pytest-timer", extras = ["colorama"], marker = "extra == 'dev'" },
+    { name = "pytest-xdist", marker = "extra == 'dev'" },
+    { name = "python-dotenv", marker = "extra == 'dev'" },
+    { name = "refurb", marker = "extra == 'dev'", specifier = ">=2" },
+    { name = "rich", marker = "extra == 'rich'" },
+    { name = "sentence-transformers", marker = "extra == 'local'" },
+    { name = "tenacity" },
+    { name = "tiktoken", specifier = ">=0.4.0" },
+    { name = "torch", marker = "extra == 'nn'", specifier = ">=2.2" },
+    { name = "tqdm" },
+    { name = "tqdm", marker = "extra == 'rich'", specifier = ">=4.56" },
+    { name = "types-aiofiles", marker = "extra == 'typing'" },
+    { name = "types-tqdm", marker = "extra == 'typing'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.12'" },
+    { name = "usearch", specifier = ">=2.13" },
+    { name = "wandb", marker = "extra == 'monitor'" },
+]
+
+[package.metadata.requires-dev]
+codeflash = [
+    { name = "codeflash", specifier = ">=0.7" },
+    { name = "fh-llm-client", extras = ["dev"] },
+]
+dev = [{ name = "fh-llm-client", extras = ["dev"] }]
+
 [[package]]
 name = "fhaviary"
-version = "0.10.1.dev8+g98a5626.d20241202"
+version = "0.10.1.dev13+ga29b453.d20241203"
 source = { editable = "." }
 dependencies = [
     { name = "docstring-parser" },
+    { name = "fh-llm-client" },
     { name = "httpx" },
     { name = "pydantic" },
 ]
@@ -803,6 +859,7 @@ image = [
     { name = "pillow" },
 ]
 llm = [
+    { name = "fh-llm-client" },
     { name = "litellm" },
 ]
 paperqa = [
@@ -899,7 +956,8 @@ requires-dist = [
     { name = "dicttoxml", marker = "extra == 'xml'" },
     { name = "docstring-parser", specifier = ">=0.16" },
     { name = "fastapi", marker = "extra == 'server'" },
-    { name = "fh-llm-client", marker = "extra == 'dev'", git = "ssh://git@github.com/Future-House/llm-client" },
+    { name = "fh-llm-client", directory = "../llm-client" },
+    { name = "fh-llm-client", marker = "extra == 'llm'", directory = "../llm-client" },
     { name = "fhaviary", extras = ["image", "llm", "server", "typing", "xml"], marker = "extra == 'dev'", editable = "." },
     { name = "httpx" },
     { name = "ipython", marker = "extra == 'dev'", specifier = ">=8" },

@@ -183,6 +183,10 @@ class ToolResponseMessage(Message):
         )
 
 
+class EnvStateMessage(Message):
+    """A message that contains the current state of the environment."""
+
+
 def dict_serialize_exclude_none(
     value: dict[str, dict[str, Any]], info: FieldSerializationInfo
 ) -> dict[str, dict[str, Any]]:

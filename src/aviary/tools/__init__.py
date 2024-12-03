@@ -1,6 +1,7 @@
 from .argref import argref_by_name
 from .base import (
     INVALID_TOOL_NAME,
+    EnvStateMessage,
     FunctionInfo,
     Messages,
     MessagesAdapter,
@@ -18,6 +19,7 @@ from .utils import EvalAnswerMode, ToolSelector, ToolSelectorLedger, eval_answer
 
 __all__ = [
     "INVALID_TOOL_NAME",
+    "EnvStateMessage",
     "EvalAnswerMode",
     "FunctionInfo",
     "Messages",
