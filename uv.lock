@@ -728,8 +728,8 @@ wheels = [
 
 [[package]]
 name = "fh-llm-client"
-version = "0.0.2.dev7+g7d8eec6"
-source = { git = "ssh://git@github.com/Future-House/llm-client#7d8eec622960f9b857331bda258bfd874e7076c5" }
+version = "0.0.2.dev10+g60be25c"
+source = { git = "ssh://git@github.com/Future-House/llm-client#60be25c600283fa034ef803c76c197ddad1de215" }
 dependencies = [
     { name = "aiofiles" },
     { name = "coredis" },
