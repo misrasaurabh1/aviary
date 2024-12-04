@@ -166,7 +166,7 @@ class Environment(ABC, Generic[TEnvState]):
         Args:
             message: ToolRequestMessage containing the tool calls.
             concurrency: Flag to set True (default) to concurrently execute tool calls,
-                otherwise set False to execute tools sequentially.
+                otherwise set False to execute tool calls in the provided order.
             handle_tool_exc: Opt-in flag to suppress Exceptions and return them as a
                 ToolResponseMessage.
             handle_invalid_tool_calls: Flag to handle invalid tool calls by returning
@@ -462,7 +462,7 @@ class DummyEnv(Environment[DummyEnvState]):
                 story: Story to print.
                 state: Environment state.
             """
-            state.reward = 1
+            state.reward = 1.0
             state.done = self.end_immediately
 
         def cast_float(x: str) -> float:

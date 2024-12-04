@@ -1,3 +1,4 @@
+from aviary.dataset_server import TaskDatasetServer
 from aviary.env import (
     TASK_DATASET_REGISTRY,
     DummyEnv,
@@ -8,7 +9,14 @@ from aviary.env import (
     TaskConfig,
     TaskDataset,
 )
-from aviary.env_client import EnvironmentClient
+from aviary.env_client import (
+    EnvironmentClient,
+    TaskDatasetClient,
+    TaskEnvClientState,
+    TaskEnvironmentClient,
+)
+from aviary.functional import DynamicState, fenv
+from aviary.message import EnvStateMessage, MalformedMessageError, Message, join
 from aviary.render import Renderer
 from aviary.tools import (
     INVALID_TOOL_NAME,
@@ -38,6 +46,8 @@ __all__ = [
     "DummyEnv",
     "DummyEnvState",
     "DummyTaskDataset",
+    "DynamicState",
+    "EnvStateMessage",
     "Environment",
     "EnvironmentClient",
     "EvalAnswerMode",
@@ -49,6 +59,10 @@ __all__ = [
     "Renderer",
     "TaskConfig",
     "TaskDataset",
+    "TaskDatasetClient",
+    "TaskDatasetServer",
+    "TaskEnvClientState",
+    "TaskEnvironmentClient",
     "Tool",
     "ToolCall",
     "ToolCallFunction",
@@ -60,6 +74,7 @@ __all__ = [
     "ToolsAdapter",
     "argref_by_name",
     "eval_answer",
+    "fenv",
     "partial_format",
     "wraps_doc_only",
 ]
