@@ -24,6 +24,7 @@ classifiers = [
 ]
 dependencies = [
     "docstring_parser>=0.16",  # Pin for description addition
+    "fh-llm-client",
     "httpx",
     "pydantic~=2.0",
 ]
@@ -41,7 +42,6 @@ cloud = [
 dev = [
     "aviary.gsm8k[typing]",
     "aviary.hotpotqa",
-    "fh-llm-client @ git+ssh://git@github.com/Future-House/llm-client#dev",  # TODO: change it to fh-llm-client after next release
     "fhaviary[image,llm,server,typing,xml]",
     "ipython>=8",  # Pin to keep recent
     "mypy>=1.8",  # Pin for mutable-override
@@ -65,6 +65,7 @@ image = [
     "Pillow",
 ]
 llm = [
+    "fh-llm-client",
     'litellm; python_version < "3.13"',  # NOTE: paper-qa==5.3 doesn't support 3.13 yet
     'litellm>=1.49.1; python_version >= "3.13"',  # For removal of imghdr
 ]

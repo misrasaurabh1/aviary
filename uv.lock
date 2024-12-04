@@ -180,7 +180,7 @@ wheels = [
 
 [[package]]
 name = "aviary-gsm8k"
-version = "0.10.1.dev7+g35c7a59.d20241126"
+version = "0.10.1.dev14+gf0e1cd5.d20241204"
 source = { editable = "packages/gsm8k" }
 dependencies = [
     { name = "datasets" },
@@ -203,7 +203,7 @@ requires-dist = [
 
 [[package]]
 name = "aviary-hotpotqa"
-version = "0.10.1.dev7+g35c7a59.d20241126"
+version = "0.10.1.dev14+gf0e1cd5.d20241204"
 source = { editable = "packages/hotpotqa" }
 dependencies = [
     { name = "beautifulsoup4" },
@@ -728,8 +728,8 @@ wheels = [
 
 [[package]]
 name = "fh-llm-client"
-version = "0.1.dev37+g250d03e.d20241203"
-source = { directory = "../llm-client" }
+version = "0.0.1"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiofiles" },
     { name = "coredis" },
@@ -748,65 +748,14 @@ dependencies = [
     { name = "typing-extensions", marker = "python_full_version < '3.12'" },
     { name = "usearch" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "aiofiles" },
-    { name = "coredis" },
-    { name = "dm-tree" },
-    { name = "fastapi", marker = "extra == 'server'", specifier = ">=0.109" },
-    { name = "fh-llm-client", extras = ["local", "monitor", "nn", "rich", "server", "typing", "visualization"], marker = "extra == 'dev'" },
-    { name = "fhaviary", directory = "." },
-    { name = "fhaviary", extras = ["xml"], marker = "extra == 'dev'" },
-    { name = "httpx" },
-    { name = "ipython", marker = "extra == 'dev'", specifier = ">=8" },
-    { name = "limits" },
-    { name = "litellm", specifier = ">=1.44" },
-    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.8" },
-    { name = "networkx", extras = ["default"], specifier = "~=3.4" },
-    { name = "numpy" },
-    { name = "pillow", marker = "extra == 'image'" },
-    { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=3.4" },
-    { name = "pydantic", specifier = "~=2.0,>=2.10.1,<2.10.2" },
-    { name = "pydantic", marker = "extra == 'dev'", specifier = "~=2.0" },
-    { name = "pydot", marker = "extra == 'visualization'", specifier = ">=3.0.1" },
-    { name = "pylint-pydantic", marker = "extra == 'dev'" },
-    { name = "pymupdf", specifier = ">=1.24.12" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8" },
-    { name = "pytest-asyncio", marker = "extra == 'dev'" },
-    { name = "pytest-mock", marker = "extra == 'dev'" },
-    { name = "pytest-recording", marker = "extra == 'dev'" },
-    { name = "pytest-rerunfailures", marker = "extra == 'dev'" },
-    { name = "pytest-subtests", marker = "extra == 'dev'" },
-    { name = "pytest-sugar", marker = "extra == 'dev'" },
-    { name = "pytest-timer", extras = ["colorama"], marker = "extra == 'dev'" },
-    { name = "pytest-xdist", marker = "extra == 'dev'" },
-    { name = "python-dotenv", marker = "extra == 'dev'" },
-    { name = "refurb", marker = "extra == 'dev'", specifier = ">=2" },
-    { name = "rich", marker = "extra == 'rich'" },
-    { name = "sentence-transformers", marker = "extra == 'local'" },
-    { name = "tenacity" },
-    { name = "tiktoken", specifier = ">=0.4.0" },
-    { name = "torch", marker = "extra == 'nn'", specifier = ">=2.2" },
-    { name = "tqdm" },
-    { name = "tqdm", marker = "extra == 'rich'", specifier = ">=4.56" },
-    { name = "types-aiofiles", marker = "extra == 'typing'" },
-    { name = "types-tqdm", marker = "extra == 'typing'" },
-    { name = "typing-extensions", marker = "python_full_version < '3.12'" },
-    { name = "usearch", specifier = ">=2.13" },
-    { name = "wandb", marker = "extra == 'monitor'" },
+sdist = { url = "https://files.pythonhosted.org/packages/e2/4a/8949493afb2317794ae83d833a6d0c29b63c8d7133865f925eb428cbd242/fh_llm_client-0.0.1.tar.gz", hash = "sha256:21d3fcb7675a25a512f4c33401a00acd6379f65034290717353eaf56848c975c", size = 186865 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/54/7b/d50be683110ef2f9484ca12528febf2ff2e6e2ed1bee547bee1bc229039d/fh_llm_client-0.0.1-py3-none-any.whl", hash = "sha256:89c23d2938fb5a82c4ffc139722a56a6ae12417e055ee379f71661430212e6f3", size = 27718 },
 ]
-
-[package.metadata.requires-dev]
-codeflash = [
-    { name = "codeflash", specifier = ">=0.7" },
-    { name = "fh-llm-client", extras = ["dev"] },
-]
-dev = [{ name = "fh-llm-client", extras = ["dev"] }]
 
 [[package]]
 name = "fhaviary"
-version = "0.10.1.dev13+ga29b453.d20241203"
+version = "0.10.1.dev14+gf0e1cd5.d20241204"
 source = { editable = "." }
 dependencies = [
     { name = "docstring-parser" },
@@ -956,8 +905,8 @@ requires-dist = [
     { name = "dicttoxml", marker = "extra == 'xml'" },
     { name = "docstring-parser", specifier = ">=0.16" },
     { name = "fastapi", marker = "extra == 'server'" },
-    { name = "fh-llm-client", directory = "../llm-client" },
-    { name = "fh-llm-client", marker = "extra == 'llm'", directory = "../llm-client" },
+    { name = "fh-llm-client" },
+    { name = "fh-llm-client", marker = "extra == 'llm'" },
     { name = "fhaviary", extras = ["image", "llm", "server", "typing", "xml"], marker = "extra == 'dev'", editable = "." },
     { name = "httpx" },
     { name = "ipython", marker = "extra == 'dev'", specifier = ">=8" },

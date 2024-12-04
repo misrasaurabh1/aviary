@@ -69,6 +69,7 @@ async def eval_answer(
     """
     if eval_mode in {EvalAnswerMode.LLM, EvalAnswerMode.LLM_SCORE}:
         try:
+            # TODO: Use llms from llmclient instead of litellm
             from litellm import acompletion
         except ImportError as e:
             raise ImportError(
