@@ -4,6 +4,7 @@ from typing import Any, Generic, Self, TypeVar, cast
 
 import httpx
 from llmclient.messages import Message
+from pydantic import BaseModel, Field
 
 from aviary.env import Environment, TaskDataset
 from aviary.tools import MessagesAdapter, Tool, ToolRequestMessage, ToolsAdapter

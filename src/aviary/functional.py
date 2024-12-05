@@ -2,12 +2,12 @@ from collections.abc import Callable
 from functools import update_wrapper
 from typing import Any
 
+from llmclient.messages import Message
+from llmclient.utils import is_coroutine_callable
 from pydantic import BaseModel, Field
 
 from aviary.env import Environment, Frame
-from aviary.message import Message
 from aviary.tools import Messages, Tool, ToolRequestMessage
-from aviary.utils import is_coroutine_callable
 
 
 class DynamicState(BaseModel):
