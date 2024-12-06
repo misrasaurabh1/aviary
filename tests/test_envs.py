@@ -10,7 +10,7 @@ import litellm
 import pytest
 import pytest_asyncio
 from httpx import AsyncClient
-from llmclient.messages import Message
+from llmclient import Message
 from pydantic import BaseModel
 from pytest_subtests import SubTests
 

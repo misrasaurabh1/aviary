@@ -177,7 +177,7 @@ wheels = [
 
 [[package]]
 name = "aviary-gsm8k"
-version = "0.10.1.dev27+g26b9d31.d20241205"
+version = "0.11.1.dev16+ga38f122.d20241206"
 source = { editable = "packages/gsm8k" }
 dependencies = [
     { name = "datasets" },
@@ -200,7 +200,7 @@ requires-dist = [
 
 [[package]]
 name = "aviary-hotpotqa"
-version = "0.10.1.dev27+g26b9d31.d20241205"
+version = "0.11.1.dev16+ga38f122.d20241206"
 source = { editable = "packages/hotpotqa" }
 dependencies = [
     { name = "beautifulsoup4" },
@@ -825,7 +825,7 @@ wheels = [
 
 [[package]]
 name = "fh-llm-client"
-version = "0.0.2"
+version = "0.0.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiofiles" },
@@ -845,14 +845,14 @@ dependencies = [
     { name = "typing-extensions", marker = "python_full_version < '3.12'" },
     { name = "usearch" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5c/72/dab708f444c234d1e86bbdf733b5ff0a06dcccd027c4f541fd2041e5a86a/fh_llm_client-0.0.2.tar.gz", hash = "sha256:70ca4f902a8dd0367efc305c248594839a92d336b742e9a4179ab759151756b5", size = 229719 }
+sdist = { url = "https://files.pythonhosted.org/packages/4f/6a/676d9fd75e4cbc77b1ad67ad6596b1a5064914d6269771de0804a6324eef/fh_llm_client-0.0.3.tar.gz", hash = "sha256:1f6f996f8e8e74f4e20d010d8c241f1dc8790837681a17fc6ef9c2545afba2e0", size = 230014 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/05/d5/8e273d3fbb8dc646bc5dd6a90fc074971ae6e66d47fb5caa67e8acc8965b/fh_llm_client-0.0.2-py3-none-any.whl", hash = "sha256:47d2959eec94df9108669624302bdbc36bd15c8a0a0723435ab9217abab9bf29", size = 33344 },
+    { url = "https://files.pythonhosted.org/packages/1c/71/6012cd770d85644217fd334fca92fa0e7f4f2744a9e196516416457cb7d4/fh_llm_client-0.0.3-py3-none-any.whl", hash = "sha256:b91bd0f9a250f9ab5239c537d9166891b36756002c72c91197c23b61c8a33cfb", size = 33647 },
 ]
 
 [[package]]
 name = "fhaviary"
-version = "0.10.1.dev27+g26b9d31.d20241205"
+version = "0.11.1.dev16+ga38f122.d20241206"
 source = { editable = "." }
 dependencies = [
     { name = "docstring-parser" },

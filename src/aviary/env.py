@@ -11,8 +11,10 @@ from collections.abc import Iterator
 from copy import deepcopy
 from typing import Annotated, Generic, Self, TypeAlias, TypeVar, cast
 
-from llmclient.messages import Message
-from llmclient.utils import is_coroutine_callable
+from llmclient import (
+    Message,
+    is_coroutine_callable,
+)
 from pydantic import (
     BaseModel,
     ConfigDict,

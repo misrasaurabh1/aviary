@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Generic, Self, TypeVar, cast
 
 import httpx
-from llmclient.messages import Message
+from llmclient import Message
 from pydantic import BaseModel, Field
 
 from aviary.env import Environment, TaskDataset
