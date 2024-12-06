@@ -852,7 +852,7 @@ wheels = [
 
 [[package]]
 name = "fhaviary"
-version = "0.11.1.dev16+ga38f122.d20241206"
+version = "0.11.1.dev19+g6267698.d20241206"
 source = { editable = "." }
 dependencies = [
     { name = "docstring-parser" },
