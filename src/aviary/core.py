@@ -43,10 +43,13 @@ from aviary.tools import (
     ToolSelector,
     ToolSelectorLedger,
     argref_by_name,
-    eval_answer,
     wraps_doc_only,
 )
-from aviary.utils import partial_format
+from aviary.utils import (
+    EvalAnswerMode,
+    eval_answer,
+    partial_format,
+)
 
 __all__ = [
     "INVALID_TOOL_NAME",
@@ -84,6 +87,7 @@ __all__ = [
     "ToolsAdapter",
     "argref_by_name",
     "encode_image_to_base64",
+    "eval_answer",
     "eval_answer",
     "fenv",
     "is_coroutine_callable",
