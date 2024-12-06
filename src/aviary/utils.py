@@ -1,5 +1,4 @@
 import contextlib
-from typing import Any
 from enum import StrEnum
 from typing import Any, cast
 

@@ -19,6 +19,7 @@ from .utils import ToolSelector, ToolSelectorLedger
 
 __all__ = [
     "INVALID_TOOL_NAME",
+    "EnvStateMessage",
     "FunctionInfo",
     "Messages",
     "MessagesAdapter",

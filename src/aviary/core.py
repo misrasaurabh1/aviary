@@ -28,7 +28,6 @@ from aviary.render import Renderer
 from aviary.tools import (
     INVALID_TOOL_NAME,
     EnvStateMessage,
-    EvalAnswerMode,
     FunctionInfo,
     Messages,
     MessagesAdapter,
