@@ -4,7 +4,7 @@ from llmclient import (
     encode_image_to_base64,
     is_coroutine_callable,
 )
-from llmclient.utils import join
+from llmclient.messages import join
 
 from aviary.dataset_server import TaskDatasetServer
 from aviary.env import (
